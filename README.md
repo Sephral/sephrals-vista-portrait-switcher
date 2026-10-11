@@ -27,7 +27,7 @@ Questions, feedback, and module support are welcome on [Discord](https://discord
 
 Requirements: Foundry VTT 14 and the Ember module.
 
-1. Install the module with its manifest URL, or unpack the release zip into `Data/modules/sephrals-vista-portrait-switcher/` (the folder name must match; `module.json` lies directly inside).
+1. Install the module with its manifest URL `https://github.com/Sephral/sephrals-vista-portrait-switcher/releases/latest/download/module.json`, or unpack the release zip into `Data/modules/sephrals-vista-portrait-switcher/` (the folder name must match; `module.json` lies directly inside).
 2. Enable the module in the world (*Manage Modules*, GM).
 3. Make the portrait images available to everyone, e.g. in `assets/<player>/<character>/` of the world or the user data. Players without upload permission need the GM for this step.
 
