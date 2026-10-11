@@ -3,7 +3,7 @@
  * click a portrait.
  */
 
-import {PALETTE_ID, POSE_HOTKEYS, setting} from "./config.mjs";
+import {PALETTE_ID, setting} from "./config.mjs";
 import {openGallery} from "./gallery.mjs";
 import {usablePoses} from "./poses.mjs";
 import {applyPose, canEdit, canSwitch, galleryActor, getPoses, isVistaScene, poseState} from "./vista.mjs";
@@ -65,11 +65,10 @@ function paletteHTML(token, actor, poses, {switchable, editable}) {
   tools.push(tool("reset", "fa-solid fa-user", "SVPS.HUD.Reset", !currentPose));
   if ( editable ) tools.push(tool("gallery", "fa-solid fa-images", "SVPS.HUD.Gallery"));
 
-  const cards = poses.map((pose, i) => {
-    const key = (i < POSE_HOTKEYS) ? `<span class="svps-key">${i + 1}</span>` : "";
+  const cards = poses.map(pose => {
     return `<button type="button" class="svps-pose${(pose.id === current) ? " active" : ""}" data-svps="pose"
       data-pose-id="${pose.id}" data-tooltip="${escape(pose.label)}"${disabled}>
-      <img src="${escape(pose.src)}" alt="" loading="lazy"${pose.mirror ? ' class="svps-mirrored"' : ""}>${key}
+      <img src="${escape(pose.src)}" alt="" loading="lazy"${pose.mirror ? ' class="svps-mirrored"' : ""}>
       <span class="svps-pose-label">${escape(pose.label)}</span></button>`;
   }).join("");
   const columns = Math.min(4, Math.max(1, poses.length));

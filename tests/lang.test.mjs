@@ -43,10 +43,6 @@ test("every key used by scripts and templates exists", async () => {
     used.add(`SVPS.SETTINGS.${key}.name`);
     used.add(`SVPS.SETTINGS.${key}.hint`);
   }
-  for ( const key of ["pose1", "pose9", "poseReset", "poseNext", "posePrevious", "openGallery"] ) {
-    used.add(`SVPS.KEYS.${key}.name`);
-    used.add(`SVPS.KEYS.${key}.hint`);
-  }
   const missing = [...used].filter(key => !enKeys.has(key));
   assert.deepEqual(missing, []);
 });

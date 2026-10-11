@@ -380,7 +380,7 @@ function currentState(target) {
 /* -------------------------------------------- */
 
 /**
- * The usable poses of the actor behind a token or actor, with their hotkey numbers.
+ * The usable poses of the actor behind a token or actor.
  * @param {Token|TokenDocument|Actor} target
  * @returns {import("./poses.mjs").VistaPose[]}
  */

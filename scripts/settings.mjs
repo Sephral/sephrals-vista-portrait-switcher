@@ -1,13 +1,12 @@
 /**
- * Settings and hotkeys of the module. Like in every Sephral module, all options appear in Foundry's settings dialog
+ * Settings of the module. Like in every Sephral module, all options appear in Foundry's settings dialog
  * under this module, starting with the module language. World settings apply to everyone and are only shown to the
  * GM; user and client settings follow the user.
  */
 
-import {MODULE_ID, POSE_HOTKEYS, TRANSITIONS} from "./config.mjs";
+import {MODULE_ID, TRANSITIONS} from "./config.mjs";
 import {refreshGalleries} from "./gallery.mjs";
 import {refreshTokenHUD} from "./hud.mjs";
-import {hotkeyTargets, onPoseHotkey, onStepHotkey, onResetHotkey, onGalleryHotkey} from "./controls.mjs";
 import {FOLLOW_FOUNDRY, applyModuleLanguage} from "./language.mjs";
 import {runSelfTest} from "./selftest.mjs";
 
@@ -122,32 +121,4 @@ export function openSettings() {
   if ( !app.rendered ) return app.render({force: true, tab: {categories: MODULE_ID}});
   app.changeTab(MODULE_ID, "categories");
   app.bringToFront();
-}
-
-/* -------------------------------------------- */
-
-/**
- * Register the hotkeys. They act on the controlled tokens in the viewed Vista, or on the user's own character.
- */
-export function registerKeybindings() {
-  const {ALT} = foundry.helpers.interaction.KeyboardManager.MODIFIER_KEYS;
-  const register = (key, editable, onDown) => game.keybindings.register(MODULE_ID, key, {
-    name: `SVPS.KEYS.${key}.name`,
-    hint: `SVPS.KEYS.${key}.hint`,
-    editable,
-    onDown: () => {
-      const targets = hotkeyTargets();
-      if ( !targets.length ) return false;
-      onDown(targets);
-      return true;
-    },
-    precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
-  });
-  for ( let n = 1; n <= POSE_HOTKEYS; n++ ) {
-    register(`pose${n}`, [{key: `Digit${n}`, modifiers: [ALT]}], targets => onPoseHotkey(targets, n));
-  }
-  register("poseReset", [{key: "Digit0", modifiers: [ALT]}], onResetHotkey);
-  register("poseNext", [{key: "PageDown", modifiers: [ALT]}], targets => onStepHotkey(targets, 1));
-  register("posePrevious", [{key: "PageUp", modifiers: [ALT]}], targets => onStepHotkey(targets, -1));
-  register("openGallery", [], onGalleryHotkey);
 }

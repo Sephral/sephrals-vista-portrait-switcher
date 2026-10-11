@@ -124,21 +124,6 @@
       "waves": "Waves",
       "wind": "Wind",
       "whiteNoise": "White noise"
-    },
-    "KEYS": {
-      "pose1": {"name": "Portrait 1", "hint": "Show the first portrait of the selected token or your character (in a Vista)."},
-      "pose2": {"name": "Portrait 2", "hint": "Show the second portrait."},
-      "pose3": {"name": "Portrait 3", "hint": "Show the third portrait."},
-      "pose4": {"name": "Portrait 4", "hint": "Show the fourth portrait."},
-      "pose5": {"name": "Portrait 5", "hint": "Show the fifth portrait."},
-      "pose6": {"name": "Portrait 6", "hint": "Show the sixth portrait."},
-      "pose7": {"name": "Portrait 7", "hint": "Show the seventh portrait."},
-      "pose8": {"name": "Portrait 8", "hint": "Show the eighth portrait."},
-      "pose9": {"name": "Portrait 9", "hint": "Show the ninth portrait."},
-      "poseReset": {"name": "Own portrait", "hint": "Show the character's own portrait (the actor image)."},
-      "poseNext": {"name": "Next portrait", "hint": "Show the next portrait of the gallery."},
-      "posePrevious": {"name": "Previous portrait", "hint": "Show the previous portrait of the gallery."},
-      "openGallery": {"name": "Open the gallery", "hint": "Open the Vista portrait gallery of the selected token or your character."}
     }
   }
 }

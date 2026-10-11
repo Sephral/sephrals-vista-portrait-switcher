@@ -18,9 +18,6 @@ export const PALETTE_ID = "svps-poses";
 export const TRANSITIONS = ["fade", "dots", "crosshatch", "glitch", "hole", "holeSwirl", "hologram", "morph", "swirl",
   "waterDrop", "waves", "wind", "whiteNoise"];
 
-/** How many poses get their own hotkey. */
-export const POSE_HOTKEYS = 9;
-
 /** The versions of Ember and Foundry the module was verified against (see the self-test). */
 export const TESTED_VERSIONS = {ember: "0.6.3", core: "14.369"};
 

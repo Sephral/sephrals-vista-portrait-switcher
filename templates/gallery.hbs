@@ -24,7 +24,6 @@
       <button type="button" class="svps-thumb" data-action="apply" {{#unless @root.switchable}}disabled{{/unless}}
         data-tooltip aria-label="{{localize "SVPS.Gallery.Apply" pose=pose.label}}">
         {{#if pose.thumb}}<img src="{{pose.thumb}}" alt="" {{#if pose.mirror}}class="svps-mirrored"{{/if}}>{{else}}<i class="fa-solid fa-image" inert></i>{{/if}}
-        {{#if pose.key}}<span class="svps-key">{{pose.key}}</span>{{/if}}
       </button>
       {{#if @root.editable}}
       <input type="hidden" name="poses.{{pose.index}}.id" value="{{pose.id}}">

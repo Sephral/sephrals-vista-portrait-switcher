@@ -4,14 +4,13 @@ import {PortraitGallery, openGallery, refreshGalleries} from "./gallery.mjs";
 import {onRenderTokenHUD} from "./hud.mjs";
 import {applyModuleLanguage} from "./language.mjs";
 import {noticeNewVersions, runSelfTest} from "./selftest.mjs";
-import {openSettings, registerKeybindings, registerSettings} from "./settings.mjs";
+import {openSettings, registerSettings} from "./settings.mjs";
 import {
   applyPose, getPoses, isVistaScene, onPreCreateToken, poseState, posesOf, resolveTarget, savePoses, stepPose
 } from "./vista.mjs";
 
 Hooks.once("init", () => {
   registerSettings();
-  registerKeybindings();
 
   Hooks.on("renderTokenHUD", onRenderTokenHUD);
   Hooks.on("preCreateToken", onPreCreateToken);

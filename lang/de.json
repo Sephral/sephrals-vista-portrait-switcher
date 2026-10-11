@@ -124,21 +124,6 @@
       "waves": "Wellen",
       "wind": "Wind",
       "whiteNoise": "Rauschen"
-    },
-    "KEYS": {
-      "pose1": {"name": "Porträt 1", "hint": "Das erste Porträt des ausgewählten Tokens oder deines Charakters zeigen (in einer Vista)."},
-      "pose2": {"name": "Porträt 2", "hint": "Das zweite Porträt zeigen."},
-      "pose3": {"name": "Porträt 3", "hint": "Das dritte Porträt zeigen."},
-      "pose4": {"name": "Porträt 4", "hint": "Das vierte Porträt zeigen."},
-      "pose5": {"name": "Porträt 5", "hint": "Das fünfte Porträt zeigen."},
-      "pose6": {"name": "Porträt 6", "hint": "Das sechste Porträt zeigen."},
-      "pose7": {"name": "Porträt 7", "hint": "Das siebte Porträt zeigen."},
-      "pose8": {"name": "Porträt 8", "hint": "Das achte Porträt zeigen."},
-      "pose9": {"name": "Porträt 9", "hint": "Das neunte Porträt zeigen."},
-      "poseReset": {"name": "Eigenes Porträt", "hint": "Das eigene Porträt des Charakters (das Akteurbild) zeigen."},
-      "poseNext": {"name": "Nächstes Porträt", "hint": "Das nächste Porträt der Galerie zeigen."},
-      "posePrevious": {"name": "Voriges Porträt", "hint": "Das vorige Porträt der Galerie zeigen."},
-      "openGallery": {"name": "Galerie öffnen", "hint": "Die Vista-Porträtgalerie des ausgewählten Tokens oder deines Charakters öffnen."}
     }
   }
 }

@@ -3,7 +3,7 @@
  * and mirroring, sort them – and switch to a portrait with a click.
  */
 
-import {MODULE_ID, POSE_HOTKEYS, TEMPLATES, makeId} from "./config.mjs";
+import {MODULE_ID, TEMPLATES, makeId} from "./config.mjs";
 import {cleanPortrait, posesFromFiles} from "./poses.mjs";
 import {applyPose, canEdit, canSwitch, getPoses, poseState, savePoses} from "./vista.mjs";
 
@@ -97,7 +97,6 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
     const poses = getPoses(actor);
     const linked = actor.prototypeToken.actorLink;
     const state = linked ? poseState(actor) : {pose: null};
-    let hotkey = 0;
     return {
       actor: {name: actor.name, img: actor.img},
       editable: canEdit(actor),
@@ -112,8 +111,7 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
         first: index === 0,
         last: index === (poses.length - 1),
         active: linked && (pose.id === state.pose),
-        thumb: pose.src,
-        key: (pose.src && (hotkey < POSE_HOTKEYS)) ? ++hotkey : null
+        thumb: pose.src
       }))
     };
   }
