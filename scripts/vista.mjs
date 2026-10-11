@@ -221,13 +221,14 @@ function uuidDocument(uuid) {
 /* -------------------------------------------- */
 
 /**
- * The update options for a portrait change: Foundry's texture transition, or none.
+ * The update options for a portrait change: Foundry's texture transition, or none. A new portrait size must not
+ * pan the canvas to a controlled token: in a Vista its center lies off screen and the whole view would jump.
  * @returns {object}
  */
 function updateOptions() {
   const transition = setting("transition");
-  if ( transition === "none" ) return {animate: false};
-  return {animation: {transition, duration: setting("transitionDuration")}};
+  if ( transition === "none" ) return {animate: false, pan: false};
+  return {animation: {transition, duration: setting("transitionDuration")}, pan: false};
 }
 
 /* -------------------------------------------- */

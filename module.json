@@ -1,7 +1,7 @@
 {
   "id": "sephrals-vista-portrait-switcher",
   "title": "Sephral’s Vista Portrait Switcher",
-  "description": "Switch the portrait an NPC shows in Ember's Vista scenes on the fly: a gallery with any number of portraits per character, a palette in the token HUD, hotkeys and a soft transition. Made for the GM, optional for players.",
+  "description": "Switch the portrait an NPC shows in Ember's Vista scenes on the fly: a gallery with any number of portraits per character, a palette in the token HUD and a soft transition. Made for the GM, optional for players.",
   "version": "1.0.0",
   "compatibility": {
     "minimum": 14,
