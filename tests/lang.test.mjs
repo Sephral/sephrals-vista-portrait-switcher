@@ -37,13 +37,13 @@ test("every key used by scripts and templates exists", async () => {
     const text = await readFile(file, "utf8");
     for ( const match of text.matchAll(/["'`](SVPS\.[A-Za-z0-9_.]+)["'`]/g) ) used.add(match[1]);
   }
-  // Keys built from a template string in settings.mjs
-  for ( const key of ["playerSwitch", "playerEdit", "applyTo", "newTokens", "transition", "transitionDuration",
-    "chatNotice", "hudButton"] ) {
+  // Keys built from a template string in settings.mjs and selftest.mjs
+  for ( const key of ["uiLanguage", "playerSwitch", "playerEdit", "applyTo", "newTokens", "transition",
+    "transitionDuration", "chatNotice", "hudButton"] ) {
     used.add(`SVPS.SETTINGS.${key}.name`);
     used.add(`SVPS.SETTINGS.${key}.hint`);
   }
-  for ( const key of ["pose1", "pose9", "poseReset", "poseNext", "posePrevious", "toggleLight", "openGallery"] ) {
+  for ( const key of ["pose1", "pose9", "poseReset", "poseNext", "posePrevious", "openGallery"] ) {
     used.add(`SVPS.KEYS.${key}.name`);
     used.add(`SVPS.KEYS.${key}.hint`);
   }

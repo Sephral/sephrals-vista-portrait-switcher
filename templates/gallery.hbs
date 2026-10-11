@@ -14,11 +14,6 @@
         <i class="fa-solid fa-user" inert></i> {{localize "SVPS.OwnPortrait"}}
       </button>
       {{/if}}
-      {{#if hasLight}}
-      <button type="button" class="svps-light {{#if light}}active{{/if}}" data-action="light" aria-pressed="{{light}}">
-        <i class="fa-solid fa-lightbulb" inert></i> {{localize "SVPS.Light"}}
-      </button>
-      {{/if}}
     </div>
     {{/if}}
   </header>
@@ -38,10 +33,6 @@
       <label class="svps-field">
         <span>{{localize "SVPS.Gallery.Image"}}</span>
         <file-picker name="poses.{{pose.index}}.src" type="image" value="{{pose.src}}"></file-picker>
-      </label>
-      <label class="svps-field">
-        <span>{{localize "SVPS.Gallery.LightImage"}}</span>
-        <file-picker name="poses.{{pose.index}}.lightSrc" type="image" value="{{pose.lightSrc}}"></file-picker>
       </label>
       <div class="svps-row">
         <label class="svps-height" data-tooltip aria-label="{{localize "SVPS.Gallery.HeightHint"}}">

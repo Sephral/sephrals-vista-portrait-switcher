@@ -1,11 +1,11 @@
 /**
- * The portrait gallery of a character: add images or whole folders, name the poses, give them a light variant,
- * a figure height and mirroring, sort them – and switch to a pose with a click.
+ * The portrait gallery of a character: add images or whole folders, name the portraits, give them a figure height
+ * and mirroring, sort them – and switch to a portrait with a click.
  */
 
 import {MODULE_ID, POSE_HOTKEYS, TEMPLATES, makeId} from "./config.mjs";
 import {cleanPortrait, posesFromFiles} from "./poses.mjs";
-import {applyPose, canEdit, canSwitch, getPoses, poseState, savePoses, toggleLight} from "./vista.mjs";
+import {applyPose, canEdit, canSwitch, getPoses, poseState, savePoses} from "./vista.mjs";
 
 const {ApplicationV2, HandlebarsApplicationMixin} = foundry.applications.api;
 
@@ -71,7 +71,6 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
     actions: {
       apply: PortraitGallery.#onApply,
       reset: PortraitGallery.#onReset,
-      light: PortraitGallery.#onLight,
       addImage: PortraitGallery.#onAddImage,
       importFolder: PortraitGallery.#onImportFolder,
       moveUp: PortraitGallery.#onMove,
@@ -97,7 +96,7 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
     const actor = this.actor;
     const poses = getPoses(actor);
     const linked = actor.prototypeToken.actorLink;
-    const state = linked ? poseState(actor) : {pose: null, light: false};
+    const state = linked ? poseState(actor) : {pose: null};
     let hotkey = 0;
     return {
       actor: {name: actor.name, img: actor.img},
@@ -105,9 +104,7 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
       switchable: canSwitch(actor),
       browse: game.user.can("FILES_BROWSE"),
       linked,
-      light: state.light,
       ownActive: linked && !poses.some(p => p.src && (p.id === state.pose)),
-      hasLight: poses.some(p => p.lightSrc),
       baseHeight: cleanPortrait(actor.flags?.ember?.portrait).height,
       poses: poses.map((pose, index) => ({
         ...pose,
@@ -115,7 +112,7 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
         first: index === 0,
         last: index === (poses.length - 1),
         active: linked && (pose.id === state.pose),
-        thumb: (state.light && pose.lightSrc) ? pose.lightSrc : pose.src,
+        thumb: pose.src,
         key: (pose.src && (hotkey < POSE_HOTKEYS)) ? ++hotkey : null
       }))
     };
@@ -148,23 +145,19 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
   /* -------------------------------------------- */
 
   /**
-   * Add image files to the gallery: new poses, and light variants of poses already there.
+   * Add image files to the gallery, one portrait per image.
    * @param {string[]} paths
-   * @returns {Promise<number>}  The number of new poses
+   * @returns {Promise<number>}  The number of new portraits
    */
   async #addFiles(paths) {
     const existing = getPoses(this.actor);
-    const {added, attached} = posesFromFiles(paths, {existing, makeId, preferred: this.actor.img});
-    if ( !added.length && !attached.length ) {
+    const added = posesFromFiles(paths, {existing, makeId, preferred: this.actor.img});
+    if ( !added.length ) {
       ui.notifications.info(_loc("SVPS.Gallery.NothingNew"));
       return 0;
     }
-    const poses = existing.map(pose => {
-      const light = attached.find(a => a.id === pose.id);
-      return light ? {...pose, lightSrc: light.lightSrc} : pose;
-    }).concat(added);
-    await savePoses(this.actor, poses);
-    ui.notifications.info(_loc("SVPS.Gallery.Added", {poses: added.length, light: attached.length}));
+    await savePoses(this.actor, existing.concat(added));
+    ui.notifications.info(_loc("SVPS.Gallery.Added", {poses: added.length}));
     return added.length;
   }
 
@@ -211,14 +204,6 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
     await applyPose(this.actor, null);
   }
 
-  /**
-   * Switch the light variants on or off.
-   * @this {PortraitGallery}
-   */
-  static async #onLight() {
-    await toggleLight(this.actor);
-  }
-
   /* -------------------------------------------- */
 
   /**
@@ -242,7 +227,7 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
   /* -------------------------------------------- */
 
   /**
-   * Pick a folder and add all its images; "-licht"/"-light" files become light variants.
+   * Pick a folder and add all its images.
    * @this {PortraitGallery}
    */
   static #onImportFolder() {

@@ -6,8 +6,7 @@
 
 import {MODULE_ID, makeId, setting} from "./config.mjs";
 import {
-  cleanPortrait, cyclePose, findPose, flippedScaleX, normalizePoses, poseAspect, posePortrait, poseSource,
-  scaledSize, usablePoses
+  cleanPortrait, cyclePose, findPose, flippedScaleX, normalizePoses, posePortrait, scaledSize, usablePoses
 } from "./poses.mjs";
 
 /**
@@ -114,10 +113,7 @@ export function imageAspect(src) {
  */
 export async function savePoses(actor, poses) {
   const normalized = normalizePoses(poses, makeId);
-  for ( const pose of normalized ) {
-    pose.aspect = (await imageAspect(pose.src)) ?? pose.aspect;
-    pose.lightAspect = pose.lightSrc ? ((await imageAspect(pose.lightSrc)) ?? pose.lightAspect) : null;
-  }
+  for ( const pose of normalized ) pose.aspect = (await imageAspect(pose.src)) ?? pose.aspect;
   await actor.update({[`flags.${MODULE_ID}.poses`]: normalized});
   return normalized;
 }
@@ -151,30 +147,27 @@ export function canEdit(actor) {
 /* -------------------------------------------- */
 
 /**
- * The pose and light state stored on a document.
+ * The pose stored on a document.
  * @param {object} flags
- * @param {{pose: string|null, light: boolean}} fallback
- * @returns {{pose: string|null, light: boolean}}
+ * @param {{pose: string|null}} fallback
+ * @returns {{pose: string|null}}
  */
 function stateFrom(flags, fallback) {
   flags ??= {};
-  return {
-    pose: ("pose" in flags) ? (flags.pose ?? null) : fallback.pose,
-    light: ("light" in flags) ? !!flags.light : fallback.light
-  };
+  return {pose: ("pose" in flags) ? (flags.pose ?? null) : fallback.pose};
 }
 
 /**
- * The current pose and light of a character, a token or the character a token belongs to.
+ * The current pose of a character, a token or the character a token belongs to.
  * @param {Token|TokenDocument|Actor} target
- * @returns {{pose: string|null, light: boolean}}
+ * @returns {{pose: string|null}}
  */
 export function poseState(target) {
   if ( target instanceof foundry.canvas.placeables.Token ) target = target.document;
   const actor = galleryActor(target);
-  const actorState = stateFrom(actor?.flags?.[MODULE_ID], {pose: null, light: false});
+  const actorState = stateFrom(actor?.flags?.[MODULE_ID], {pose: null});
   if ( !(target instanceof foundry.documents.TokenDocument) ) return actorState;
-  return stateFrom(target.flags?.[MODULE_ID], target.actorLink ? actorState : {pose: null, light: false});
+  return stateFrom(target.flags?.[MODULE_ID], target.actorLink ? actorState : {pose: null});
 }
 
 /* -------------------------------------------- */
@@ -244,11 +237,10 @@ function updateOptions() {
  * @param {Token|TokenDocument|Actor|string} target
  * @param {string|number|null} ref      Pose id, name or 1-based number; null = the actor's own portrait
  * @param {object} [options]
- * @param {boolean} [options.light]     Show the light variants; default: keep the current state
  * @param {boolean} [options.notify]    Warn when nothing could be changed
  * @returns {Promise<{tokens: number}|null>}  The number of changed tokens, null if nothing was done
  */
-export async function applyPose(target, ref, {light, notify=true}={}) {
+export async function applyPose(target, ref, {notify=true}={}) {
   const resolved = resolveTarget(target);
   if ( !resolved ) return null;
   const {actor, linked, tokens, origin} = resolved;
@@ -269,8 +261,7 @@ export async function applyPose(target, ref, {light, notify=true}={}) {
   }
 
   const before = poseState(origin ?? (linked ? actor : tokens[0]));
-  light ??= before.light;
-  const src = poseSource(pose, light, actor.img);
+  const src = pose?.src ?? actor.img;
   let aspect = null;
   if ( pose ) {
     aspect = await imageAspect(src);
@@ -278,13 +269,13 @@ export async function applyPose(target, ref, {light, notify=true}={}) {
       if ( notify ) ui.notifications.error(_loc("SVPS.Notify.MissingImage", {src}));
       return null;
     }
-    await rememberAspect(actor, pose, light, aspect);
+    await rememberAspect(actor, pose, aspect);
   }
 
   // Token updates, grouped by scene
   const base = actor.flags?.ember?.portrait ?? {};
   const portrait = posePortrait(base, pose, aspect);
-  const state = {pose: pose?.id ?? null, light};
+  const state = {pose: pose?.id ?? null};
   const byScene = new Map();
   for ( const token of tokens ) {
     const from = cleanPortrait(token.flags?.ember?.portrait ?? base);
@@ -329,14 +320,11 @@ export async function applyPose(target, ref, {light, notify=true}={}) {
  * Keep the measured proportions of an image with its pose, if they were not known yet.
  * @param {Actor} actor
  * @param {import("./poses.mjs").VistaPose} pose
- * @param {boolean} light
  * @param {number} aspect
  */
-async function rememberAspect(actor, pose, light, aspect) {
-  const known = poseAspect(pose, light);
-  if ( (known && (Math.abs(known - aspect) < 0.001)) || !actor.isOwner ) return;
-  const key = (light && pose.lightSrc) ? "lightAspect" : "aspect";
-  const poses = getPoses(actor).map(p => (p.id === pose.id) ? {...p, [key]: aspect} : p);
+async function rememberAspect(actor, pose, aspect) {
+  if ( (pose.aspect && (Math.abs(pose.aspect - aspect) < 0.001)) || !actor.isOwner ) return;
+  const poses = getPoses(actor).map(p => (p.id === pose.id) ? {...p, aspect} : p);
   await actor.update({[`flags.${MODULE_ID}.poses`]: poses});
 }
 
@@ -362,22 +350,6 @@ async function announce(actor, token, pose, src) {
 /* -------------------------------------------- */
 
 /**
- * Switch the light variants on or off, keeping the pose.
- * @param {Token|TokenDocument|Actor|string} target
- * @param {boolean} [force]
- * @returns {Promise<{tokens: number}|null>}
- */
-export function toggleLight(target, force) {
-  const actor = resolveTarget(target)?.actor;
-  if ( !actor ) return Promise.resolve(null);
-  const state = currentState(target);
-  const pose = findPose(getPoses(actor), state.pose);
-  return applyPose(target, pose?.id ?? null, {light: force ?? !state.light});
-}
-
-/* -------------------------------------------- */
-
-/**
  * Show the next or previous pose.
  * @param {Token|TokenDocument|Actor|string} target
  * @param {number} step     +1 or -1
@@ -396,11 +368,11 @@ export function stepPose(target, step) {
 /**
  * The state that a switch on this target starts from.
  * @param {Token|TokenDocument|Actor|string} target
- * @returns {{pose: string|null, light: boolean}}
+ * @returns {{pose: string|null}}
  */
 function currentState(target) {
   const resolved = resolveTarget(target);
-  if ( !resolved ) return {pose: null, light: false};
+  if ( !resolved ) return {pose: null};
   const {actor, linked, tokens, origin} = resolved;
   return poseState(origin ?? (linked ? actor : (tokens[0] ?? actor)));
 }
@@ -431,8 +403,7 @@ export function onPreCreateToken(document, data) {
   if ( !setting("newTokens") || !isVistaScene(document.parent) ) return;
   const actor = galleryActor(document);
   if ( !actor || !document.actorLink ) return;
-  const {pose: poseId, light} = poseState(actor);
-  const pose = findPose(getPoses(actor), poseId);
+  const pose = findPose(getPoses(actor), poseState(actor).pose);
   if ( !pose ) return;
   const prototypeSrc = actor.prototypeToken.texture.src;
   const emberDone = foundry.utils.hasProperty(data, "flags.ember.portrait");
@@ -440,10 +411,10 @@ export function onPreCreateToken(document, data) {
   if ( (src !== prototypeSrc) && !(emberDone && (src === actor.img)) ) return; // A custom image wins
 
   const base = actor.flags?.ember?.portrait ?? {};
-  const portrait = posePortrait(base, pose, poseAspect(pose, light));
+  const portrait = posePortrait(base, pose, pose.aspect);
   const changes = {
-    texture: {src: poseSource(pose, light)},
-    flags: {ember: {portrait}, [MODULE_ID]: {pose: pose.id, light}}
+    texture: {src: pose.src},
+    flags: {ember: {portrait}, [MODULE_ID]: {pose: pose.id}}
   };
   if ( emberDone ) {
     const from = cleanPortrait(document.flags.ember?.portrait ?? base);

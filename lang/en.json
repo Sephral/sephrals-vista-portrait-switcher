@@ -1,10 +1,8 @@
 {
   "SVPS": {
     "OwnPortrait": "Own portrait",
-    "Light": "Light",
     "HUD": {
       "Button": "Vista portraits",
-      "Light": "Light variants on/off",
       "Reset": "Show the character's own portrait",
       "Gallery": "Open the gallery",
       "Empty": "No portraits yet. Open the gallery to add images."
@@ -29,7 +27,6 @@
       "Apply": "Show \"{pose}\"",
       "Label": "Name",
       "Image": "Image",
-      "LightImage": "With light (optional)",
       "Height": "Height",
       "HeightHint": "Height of the figure in feet. Empty: the character's portrait height. Lower it for kneeling or crouching poses.",
       "Mirror": "Mirror",
@@ -43,14 +40,23 @@
       "AddPose": "Add portrait",
       "NewPose": "New portrait",
       "ImportFolder": "Import folder",
-      "ImportHint": "Folder import: images ending in \"-light\" or \"-licht\" become the light variant of the image with the same name.",
+      "ImportHint": "Folder import: every image of the folder becomes a portrait, named after its file.",
       "NoBrowse": "You may not browse files: add a portrait and type the image path.",
       "NothingNew": "These images are already in the gallery.",
-      "Added": "{poses} portrait(s) added, {light} light variant(s) assigned.",
+      "Added": "{poses} portrait(s) added.",
       "NoImages": "No images found in {path}.",
       "FolderFailed": "The folder {path} could not be read (see the console)."
     },
+    "LANGUAGE": {
+      "default": "Follow Foundry",
+      "de": "Deutsch",
+      "en": "English"
+    },
     "SETTINGS": {
+      "uiLanguage": {
+        "name": "Language",
+        "hint": "Choose whether the Vista Portrait Switcher follows Foundry or uses a fixed module language."
+      },
       "playerSwitch": {
         "name": "Players switch portraits",
         "hint": "Players may switch the Vista portraits of the characters they own."
@@ -87,6 +93,23 @@
         "hint": "Show the mask button with the portrait palette when you right-click a token in a Vista."
       }
     },
+    "SELFTEST": {
+      "Title": "Self test",
+      "Run": "Run self test",
+      "Hint": "Checks the connection to Ember's Vistas and loads every image of every gallery. Run it after Ember or Foundry updates.",
+      "Started": "Vista Portrait Switcher self test running …",
+      "Summary": "Vista Portrait Switcher self test: {vistas} Vistas, {galleries} galleries with {images} portraits, {missing} missing images, {integrations} integration notes.",
+      "Integrations": "Integration",
+      "Missing": "Images that cannot be loaded",
+      "EmberInactive": "The Ember module is not active.",
+      "VistaClass": "Ember's Vista scene manager was not found. Vistas are only recognized by Ember's scene list.",
+      "ManagedScenes": "Foundry's list of managed scenes is missing.",
+      "NoVistas": "This world has no Vista scenes.",
+      "PortraitFlag": "No Vista token carries Ember's portrait data (flags.ember.portrait). Sizes may be wrong.",
+      "Transitions": "Foundry does not know these transitions: {types}",
+      "Version": "{id} {current} (tested {tested})",
+      "NewVersions": "Sephral’s Vista Portrait Switcher was tested with older versions. New: {versions}. Please run the self test in the module settings (Configure Settings → Sephral’s Vista Portrait Switcher)."
+    },
     "TRANSITIONS": {
       "fade": "Fade",
       "dots": "Dots",
@@ -115,7 +138,6 @@
       "poseReset": {"name": "Own portrait", "hint": "Show the character's own portrait (the actor image)."},
       "poseNext": {"name": "Next portrait", "hint": "Show the next portrait of the gallery."},
       "posePrevious": {"name": "Previous portrait", "hint": "Show the previous portrait of the gallery."},
-      "toggleLight": {"name": "Light variants on/off", "hint": "Switch to the light variants of the portraits and back."},
       "openGallery": {"name": "Open the gallery", "hint": "Open the Vista portrait gallery of the selected token or your character."}
     }
   }

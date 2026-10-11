@@ -6,7 +6,7 @@
 import {PALETTE_ID, POSE_HOTKEYS, setting} from "./config.mjs";
 import {openGallery} from "./gallery.mjs";
 import {usablePoses} from "./poses.mjs";
-import {applyPose, canEdit, canSwitch, galleryActor, getPoses, isVistaScene, poseState, toggleLight} from "./vista.mjs";
+import {applyPose, canEdit, canSwitch, galleryActor, getPoses, isVistaScene, poseState} from "./vista.mjs";
 
 /**
  * Add the mask button and its palette to the token HUD of a Vista token.
@@ -54,7 +54,7 @@ export function onRenderTokenHUD(hud, element) {
  */
 function paletteHTML(token, actor, poses, {switchable, editable}) {
   const escape = foundry.utils.escapeHTML;
-  const {pose: current, light} = poseState(token);
+  const current = poseState(token).pose;
   const currentPose = poses.find(p => p.id === current);
   const disabled = switchable ? "" : " disabled";
   const tool = (action, icon, label, active=false) => `<button type="button" class="svps-tool${active ? " active" : ""}"
@@ -62,16 +62,14 @@ function paletteHTML(token, actor, poses, {switchable, editable}) {
     <i class="${icon}" inert></i></button>`;
 
   const tools = [];
-  if ( poses.some(p => p.lightSrc) ) tools.push(tool("light", "fa-solid fa-lightbulb", "SVPS.HUD.Light", light));
   tools.push(tool("reset", "fa-solid fa-user", "SVPS.HUD.Reset", !currentPose));
   if ( editable ) tools.push(tool("gallery", "fa-solid fa-images", "SVPS.HUD.Gallery"));
 
   const cards = poses.map((pose, i) => {
-    const src = (light && pose.lightSrc) ? pose.lightSrc : pose.src;
     const key = (i < POSE_HOTKEYS) ? `<span class="svps-key">${i + 1}</span>` : "";
     return `<button type="button" class="svps-pose${(pose.id === current) ? " active" : ""}" data-svps="pose"
       data-pose-id="${pose.id}" data-tooltip="${escape(pose.label)}"${disabled}>
-      <img src="${escape(src)}" alt="" loading="lazy"${pose.mirror ? ' class="svps-mirrored"' : ""}>${key}
+      <img src="${escape(pose.src)}" alt="" loading="lazy"${pose.mirror ? ' class="svps-mirrored"' : ""}>${key}
       <span class="svps-pose-label">${escape(pose.label)}</span></button>`;
   }).join("");
   const columns = Math.min(4, Math.max(1, poses.length));
@@ -102,9 +100,6 @@ async function onPaletteClick(event, hud, token, actor) {
       break;
     case "reset":
       await applyPose(token, null);
-      break;
-    case "light":
-      await toggleLight(token);
       break;
     case "gallery":
       hud.togglePalette(PALETTE_ID, false);

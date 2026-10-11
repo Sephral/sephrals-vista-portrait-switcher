@@ -2,10 +2,11 @@ import {MODULE_ID} from "./config.mjs";
 import {addContextOptions, addHeaderControl} from "./controls.mjs";
 import {PortraitGallery, openGallery, refreshGalleries} from "./gallery.mjs";
 import {onRenderTokenHUD} from "./hud.mjs";
-import {registerKeybindings, registerSettings} from "./settings.mjs";
+import {applyModuleLanguage} from "./language.mjs";
+import {noticeNewVersions, runSelfTest} from "./selftest.mjs";
+import {openSettings, registerKeybindings, registerSettings} from "./settings.mjs";
 import {
-  applyPose, getPoses, isVistaScene, onPreCreateToken, poseState, posesOf, resolveTarget, savePoses, stepPose,
-  toggleLight
+  applyPose, getPoses, isVistaScene, onPreCreateToken, poseState, posesOf, resolveTarget, savePoses, stepPose
 } from "./vista.mjs";
 
 Hooks.once("init", () => {
@@ -25,15 +26,13 @@ Hooks.once("init", () => {
     resetPose: target => applyPose(target, null),
     /** Show the next (+1) or previous (-1) pose. */
     stepPose,
-    /** Switch the light variants on or off (or to the given state). */
-    toggleLight,
     /** The gallery of an actor. */
     getPoses,
     /** Store a gallery on an actor. */
     savePoses,
     /** The usable poses of a token or actor. */
     posesOf,
-    /** The current pose and light of a token or character. */
+    /** The current pose of a token or character. */
     poseState,
     /** Which actor and tokens a switch on this target reaches. */
     resolveTarget,
@@ -41,8 +40,24 @@ Hooks.once("init", () => {
     openGallery,
     /** Is this scene an Ember Vista? */
     isVistaScene,
+    /** Open Foundry's settings dialog on the page of this module. */
+    openSettings,
+    /** Check the Ember integration and every gallery image (GM). */
+    runSelfTest,
     PortraitGallery
   };
+});
+
+/** Applying a fixed module language loads its file; the version notice waits for it. */
+let languageReady = Promise.resolve();
+
+Hooks.once("i18nInit", () => {
+  languageReady = applyModuleLanguage(game.settings.get(MODULE_ID, "uiLanguage"));
+});
+
+Hooks.once("ready", async () => {
+  await languageReady;
+  noticeNewVersions();
 });
 
 /* -------------------------------------------- */

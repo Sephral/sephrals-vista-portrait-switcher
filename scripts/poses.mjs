@@ -8,11 +8,9 @@
  * @property {string} id                 Stable id of the pose
  * @property {string} label              Name shown in the palette and the gallery
  * @property {string} src                Image path
- * @property {string|null} lightSrc      Optional variant of the image with light (e.g. a light orb)
  * @property {number|null} height        Figure height in feet, null = the actor's portrait height
  * @property {boolean} mirror            Mirror this image relative to the actor's portrait
  * @property {number|null} aspect        Width / height of `src`, cached for synchronous use
- * @property {number|null} lightAspect   Width / height of `lightSrc`
  */
 
 /**
@@ -24,9 +22,6 @@ export const DEFAULT_PORTRAIT = Object.freeze({height: 6, width: 3, anchorX: 0.5
 /** Ember stores portrait sizes in steps of half a foot, starting at one foot. */
 const SIZE_STEP = 0.5;
 const SIZE_MIN = 1;
-
-/** A file name ending which marks the variant of an image with light: "-licht", "_light", " lit" … */
-const LIGHT_SUFFIX = /^(.*?)[-_ .]+(licht|light|lit)$/i;
 
 /* -------------------------------------------- */
 /*  Poses                                       */
@@ -62,19 +57,7 @@ export function withoutQuery(path) {
 /* -------------------------------------------- */
 
 /**
- * Split the light marker off a file name: "tharun-front-licht" → {base: "tharun-front", light: true}.
- * @param {string} stem
- * @returns {{base: string, light: boolean}}
- */
-export function splitLightSuffix(stem) {
-  const match = String(stem).match(LIGHT_SUFFIX);
-  return match ? {base: match[1], light: true} : {base: String(stem), light: false};
-}
-
-/* -------------------------------------------- */
-
-/**
- * The longest common beginning of several names, cut back to the last separator ("tharun-vista-").
+ * The longest common beginning of several names, cut back to the last separator ("mira-vista-").
  * @param {string[]} stems
  * @returns {string}
  */
@@ -93,7 +76,7 @@ export function commonPrefix(stems) {
 /* -------------------------------------------- */
 
 /**
- * A readable label from a file name: "tharun-vista-blick-links" with prefix "tharun-vista-" → "Blick links".
+ * A readable label from a file name: "mira-vista-look-left" with prefix "mira-vista-" → "Look left".
  * @param {string} stem
  * @param {string} [prefix]
  * @returns {string}
@@ -130,17 +113,14 @@ function positiveOrNull(value) {
 export function normalizePose(data, makeId) {
   data ??= {};
   const src = (typeof data.src === "string") ? data.src.trim() : "";
-  const lightSrc = (typeof data.lightSrc === "string") ? data.lightSrc.trim() : "";
   const height = positiveOrNull(data.height);
   return {
     id: ((typeof data.id === "string") && data.id) ? data.id : makeId(),
     label: String(data.label ?? "").trim() || (src ? labelFromStem(fileStem(src)) : ""),
     src,
-    lightSrc: lightSrc || null,
     height: (height === null) ? null : Math.max(SIZE_MIN, height),
     mirror: !!data.mirror,
-    aspect: positiveOrNull(data.aspect),
-    lightAspect: lightSrc ? positiveOrNull(data.lightAspect) : null
+    aspect: positiveOrNull(data.aspect)
   };
 }
 
@@ -220,60 +200,30 @@ export function cyclePose(poses, currentId, step) {
 /* -------------------------------------------- */
 
 /**
- * Turn image files into new poses. A file ending in "-licht", "-light" or "-lit" becomes the light variant of the
- * file with the same name, also of a pose that is already in the gallery. Names come from the file names without
- * their common beginning.
+ * Turn image files into new poses, one per image. Images already in the gallery are skipped. Names come from the
+ * file names without their common beginning.
  * @param {string[]} paths
  * @param {object} options
  * @param {VistaPose[]} [options.existing]     Poses already in the gallery; their files are skipped
  * @param {() => string} options.makeId
  * @param {string} [options.preferred]         An image to put first, e.g. the actor's portrait
- * @returns {{added: VistaPose[], attached: {id: string, lightSrc: string}[]}}
+ * @returns {VistaPose[]}
  */
 export function posesFromFiles(paths, {existing=[], makeId, preferred}={}) {
-  const known = new Set(existing.flatMap(p => [p.src, p.lightSrc]).filter(Boolean).map(withoutQuery));
+  const known = new Set(existing.map(p => p.src).filter(Boolean).map(withoutQuery));
   const files = [...new Set(paths)].filter(p => p && !known.has(withoutQuery(p)));
 
-  // Pair plain images with their light variants
-  const groups = new Map();
-  for ( const path of files ) {
-    const {base, light} = splitLightSuffix(fileStem(path));
-    const key = base.toLowerCase();
-    const group = groups.get(key) ?? {base, src: null, lightSrc: null};
-    if ( light ) group.lightSrc ??= path;
-    else group.src ??= path;
-    groups.set(key, group);
-  }
-
-  // Light variants of poses which are already in the gallery
-  const attached = [];
-  const existingByBase = new Map();
-  for ( const pose of existing ) {
-    if ( pose.src ) existingByBase.set(splitLightSuffix(fileStem(pose.src)).base.toLowerCase(), pose);
-  }
-  for ( const [key, group] of groups ) {
-    const pose = existingByBase.get(key);
-    if ( group.src || !pose || pose.lightSrc ) continue;
-    attached.push({id: pose.id, lightSrc: group.lightSrc});
-    groups.delete(key);
-  }
-
   // Names without the beginning all files share
-  const stems = [...groups.values()].map(g => g.base)
-    .concat(existing.filter(p => p.src).map(p => splitLightSuffix(fileStem(p.src)).base));
+  const stems = files.map(fileStem).concat(existing.filter(p => p.src).map(p => fileStem(p.src)));
   const prefix = commonPrefix(stems);
-  const added = [...groups.values()].map(group => normalizePose({
-    label: labelFromStem(group.base, prefix),
-    src: group.src ?? group.lightSrc,
-    lightSrc: group.src ? group.lightSrc : null
-  }, makeId));
+  const added = files.map(src => normalizePose({label: labelFromStem(fileStem(src), prefix), src}, makeId));
   added.sort((a, b) => a.label.localeCompare(b.label));
   if ( preferred ) {
     preferred = withoutQuery(preferred);
-    const first = added.findIndex(p => (withoutQuery(p.src) === preferred) || (withoutQuery(p.lightSrc) === preferred));
+    const first = added.findIndex(p => withoutQuery(p.src) === preferred);
     if ( first > 0 ) added.unshift(...added.splice(first, 1));
   }
-  return {added, attached};
+  return added;
 }
 
 /* -------------------------------------------- */
@@ -343,33 +293,6 @@ export function posePortrait(base, pose, aspect) {
     ? toSizeStep(height * aspect, base.width)
     : toSizeStep(base.width * (height / base.height), base.width);
   return cleanPortrait({...base, height, width, flip: base.flip !== !!pose.mirror});
-}
-
-/* -------------------------------------------- */
-
-/**
- * The image a pose shows: the light variant if light is on and the pose has one. Without a pose the fallback.
- * @param {VistaPose|null} pose
- * @param {boolean} light
- * @param {string} [fallback]
- * @returns {string|null}
- */
-export function poseSource(pose, light, fallback=null) {
-  if ( !pose ) return fallback;
-  return (light && pose.lightSrc) ? pose.lightSrc : pose.src;
-}
-
-/* -------------------------------------------- */
-
-/**
- * The cached proportions of the image a pose shows.
- * @param {VistaPose|null} pose
- * @param {boolean} light
- * @returns {number|null}
- */
-export function poseAspect(pose, light) {
-  if ( !pose ) return null;
-  return (light && pose.lightSrc) ? pose.lightAspect : pose.aspect;
 }
 
 /* -------------------------------------------- */

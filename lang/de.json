@@ -1,10 +1,8 @@
 {
   "SVPS": {
     "OwnPortrait": "Eigenes Porträt",
-    "Light": "Licht",
     "HUD": {
       "Button": "Vista-Porträts",
-      "Light": "Lichtfassungen an/aus",
       "Reset": "Eigenes Porträt des Charakters zeigen",
       "Gallery": "Galerie öffnen",
       "Empty": "Noch keine Porträts. Öffne die Galerie, um Bilder hinzuzufügen."
@@ -29,7 +27,6 @@
       "Apply": "„{pose}“ zeigen",
       "Label": "Name",
       "Image": "Bild",
-      "LightImage": "Mit Licht (optional)",
       "Height": "Höhe",
       "HeightHint": "Höhe der Figur in Fuß. Leer: die Porträthöhe des Charakters. Für kniende oder geduckte Posen kleiner wählen.",
       "Mirror": "Spiegeln",
@@ -43,14 +40,23 @@
       "AddPose": "Porträt hinzufügen",
       "NewPose": "Neues Porträt",
       "ImportFolder": "Ordner importieren",
-      "ImportHint": "Ordnerimport: Bilder, deren Name auf „-licht“ oder „-light“ endet, werden zur Lichtfassung des gleichnamigen Bildes.",
+      "ImportHint": "Ordnerimport: Jedes Bild des Ordners wird ein Porträt, benannt nach seinem Dateinamen.",
       "NoBrowse": "Du darfst keine Dateien durchsuchen: Füge ein Porträt hinzu und trage den Bildpfad ein.",
       "NothingNew": "Diese Bilder sind schon in der Galerie.",
-      "Added": "{poses} Porträt(s) hinzugefügt, {light} Lichtfassung(en) zugeordnet.",
+      "Added": "{poses} Porträt(s) hinzugefügt.",
       "NoImages": "In {path} wurden keine Bilder gefunden.",
       "FolderFailed": "Der Ordner {path} konnte nicht gelesen werden (siehe Konsole)."
     },
+    "LANGUAGE": {
+      "default": "Foundry folgen",
+      "de": "Deutsch",
+      "en": "English"
+    },
     "SETTINGS": {
+      "uiLanguage": {
+        "name": "Sprache",
+        "hint": "Festlegen, ob der Vista Portrait Switcher Foundry folgt oder eine feste Modulsprache verwendet."
+      },
       "playerSwitch": {
         "name": "Spieler wechseln Porträts",
         "hint": "Spieler dürfen die Vista-Porträts der Charaktere wechseln, die ihnen gehören."
@@ -87,6 +93,23 @@
         "hint": "Beim Rechtsklick auf ein Token in einer Vista den Maskenknopf mit der Porträtleiste zeigen."
       }
     },
+    "SELFTEST": {
+      "Title": "Selbsttest",
+      "Run": "Selbsttest starten",
+      "Hint": "Prüft die Anbindung an Embers Vistas und lädt jedes Bild jeder Galerie. Nach Updates von Ember oder Foundry ausführen.",
+      "Started": "Selbsttest von Vista Portrait Switcher läuft …",
+      "Summary": "Selbsttest Vista Portrait Switcher: {vistas} Vistas, {galleries} Galerien mit {images} Porträts, {missing} fehlende Bilder, {integrations} Hinweise zur Anbindung.",
+      "Integrations": "Anbindung",
+      "Missing": "Bilder, die nicht geladen werden können",
+      "EmberInactive": "Das Modul Ember ist nicht aktiv.",
+      "VistaClass": "Embers Vista-Szenenverwaltung wurde nicht gefunden. Vistas werden nur über Embers Szenenliste erkannt.",
+      "ManagedScenes": "Foundrys Liste der verwalteten Szenen fehlt.",
+      "NoVistas": "Diese Welt hat keine Vista-Szenen.",
+      "PortraitFlag": "Kein Vista-Token trägt Embers Porträtdaten (flags.ember.portrait). Größen können falsch sein.",
+      "Transitions": "Foundry kennt diese Übergänge nicht: {types}",
+      "Version": "{id} {current} (getestet {tested})",
+      "NewVersions": "Sephral’s Vista Portrait Switcher wurde mit älteren Versionen getestet. Neu: {versions}. Bitte den Selbsttest in den Moduleinstellungen ausführen (Einstellungen konfigurieren → Sephral’s Vista Portrait Switcher)."
+    },
     "TRANSITIONS": {
       "fade": "Überblenden",
       "dots": "Punkte",
@@ -115,7 +138,6 @@
       "poseReset": {"name": "Eigenes Porträt", "hint": "Das eigene Porträt des Charakters (das Akteurbild) zeigen."},
       "poseNext": {"name": "Nächstes Porträt", "hint": "Das nächste Porträt der Galerie zeigen."},
       "posePrevious": {"name": "Voriges Porträt", "hint": "Das vorige Porträt der Galerie zeigen."},
-      "toggleLight": {"name": "Lichtfassungen an/aus", "hint": "Zu den Lichtfassungen der Porträts wechseln und zurück."},
       "openGallery": {"name": "Galerie öffnen", "hint": "Die Vista-Porträtgalerie des ausgewählten Tokens oder deines Charakters öffnen."}
     }
   }

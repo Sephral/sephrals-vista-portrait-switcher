@@ -4,9 +4,7 @@
  */
 
 import {openGallery} from "./gallery.mjs";
-import {
-  applyPose, canEdit, canSwitch, galleryActor, isVistaScene, posesOf, stepPose, toggleLight
-} from "./vista.mjs";
+import {applyPose, canEdit, canSwitch, galleryActor, isVistaScene, posesOf, stepPose} from "./vista.mjs";
 
 /* -------------------------------------------- */
 /*  Hotkeys                                     */
@@ -62,14 +60,6 @@ export function onResetHotkey(targets) {
  */
 export function onStepHotkey(targets, step) {
   for ( const target of targets ) stepPose(target, step);
-}
-
-/**
- * Switch the light variants.
- * @param {(TokenDocument|Actor)[]} targets
- */
-export function onLightHotkey(targets) {
-  for ( const target of targets ) toggleLight(target);
 }
 
 /**

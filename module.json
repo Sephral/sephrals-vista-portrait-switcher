@@ -1,11 +1,11 @@
 {
   "id": "sephrals-vista-portrait-switcher",
   "title": "Sephral’s Vista Portrait Switcher",
-  "description": "Switch the portrait a character shows in Ember's Vista scenes on the fly: a gallery of poses and moods per character, a palette in the token HUD, hotkeys, light variants and a soft transition – for players and the GM.",
+  "description": "Switch the portrait a character shows in Ember's Vista scenes on the fly: a gallery with any number of portraits per character, a palette in the token HUD, hotkeys and a soft transition – for players and the GM.",
   "version": "1.0.0",
   "compatibility": {
     "minimum": 14,
-    "verified": "14.368"
+    "verified": "14.369"
   },
   "authors": [
     {
@@ -20,7 +20,7 @@
         "type": "module",
         "compatibility": {
           "minimum": "0.6.0",
-          "verified": "0.6.2"
+          "verified": "0.6.3"
         }
       }
     ]
