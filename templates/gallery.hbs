@@ -1,0 +1,86 @@
+<div class="svps-gallery-body">
+  <header class="svps-gallery-head">
+    <img class="svps-actor-img" src="{{actor.img}}" alt="">
+    <div class="svps-head-text">
+      <h2>{{actor.name}}</h2>
+      <p class="hint">{{#if switchable}}{{localize "SVPS.Gallery.HintSwitch"}}{{/if}}
+        {{#if editable}}{{localize "SVPS.Gallery.HintEdit"}}{{/if}}
+        {{#unless linked}}{{localize "SVPS.Gallery.HintUnlinked"}}{{/unless}}</p>
+    </div>
+    {{#if switchable}}
+    <div class="svps-head-tools">
+      {{#if linked}}
+      <button type="button" class="svps-own {{#if ownActive}}active{{/if}}" data-action="reset">
+        <i class="fa-solid fa-user" inert></i> {{localize "SVPS.OwnPortrait"}}
+      </button>
+      {{/if}}
+      {{#if hasLight}}
+      <button type="button" class="svps-light {{#if light}}active{{/if}}" data-action="light" aria-pressed="{{light}}">
+        <i class="fa-solid fa-lightbulb" inert></i> {{localize "SVPS.Light"}}
+      </button>
+      {{/if}}
+    </div>
+    {{/if}}
+  </header>
+
+  <section class="svps-cards">
+    {{#each poses as |pose|}}
+    <article class="svps-card {{#if pose.active}}active{{/if}}" data-pose-id="{{pose.id}}" data-index="{{pose.index}}">
+      <button type="button" class="svps-thumb" data-action="apply" {{#unless @root.switchable}}disabled{{/unless}}
+        data-tooltip aria-label="{{localize "SVPS.Gallery.Apply" pose=pose.label}}">
+        {{#if pose.thumb}}<img src="{{pose.thumb}}" alt="" {{#if pose.mirror}}class="svps-mirrored"{{/if}}>{{else}}<i class="fa-solid fa-image" inert></i>{{/if}}
+        {{#if pose.key}}<span class="svps-key">{{pose.key}}</span>{{/if}}
+      </button>
+      {{#if @root.editable}}
+      <input type="hidden" name="poses.{{pose.index}}.id" value="{{pose.id}}">
+      <input type="text" class="svps-label-input" name="poses.{{pose.index}}.label" value="{{pose.label}}"
+        placeholder="{{localize "SVPS.Gallery.Label"}}" aria-label="{{localize "SVPS.Gallery.Label"}}">
+      <label class="svps-field">
+        <span>{{localize "SVPS.Gallery.Image"}}</span>
+        <file-picker name="poses.{{pose.index}}.src" type="image" value="{{pose.src}}"></file-picker>
+      </label>
+      <label class="svps-field">
+        <span>{{localize "SVPS.Gallery.LightImage"}}</span>
+        <file-picker name="poses.{{pose.index}}.lightSrc" type="image" value="{{pose.lightSrc}}"></file-picker>
+      </label>
+      <div class="svps-row">
+        <label class="svps-height" data-tooltip aria-label="{{localize "SVPS.Gallery.HeightHint"}}">
+          <span>{{localize "SVPS.Gallery.Height"}}</span>
+          <input type="number" name="poses.{{pose.index}}.height" value="{{pose.height}}" min="1" step="0.5"
+            placeholder="{{@root.baseHeight}}">
+          <span class="units">ft</span>
+        </label>
+        <label class="svps-mirror" data-tooltip aria-label="{{localize "SVPS.Gallery.MirrorHint"}}">
+          <input type="checkbox" name="poses.{{pose.index}}.mirror" {{checked pose.mirror}}>
+          <span>{{localize "SVPS.Gallery.Mirror"}}</span>
+        </label>
+      </div>
+      <div class="svps-card-tools">
+        <button type="button" data-action="moveUp" {{#if pose.first}}disabled{{/if}}
+          data-tooltip aria-label="{{localize "SVPS.Gallery.MoveUp"}}"><i class="fa-solid fa-arrow-left" inert></i></button>
+        <button type="button" data-action="moveDown" {{#if pose.last}}disabled{{/if}}
+          data-tooltip aria-label="{{localize "SVPS.Gallery.MoveDown"}}"><i class="fa-solid fa-arrow-right" inert></i></button>
+        <button type="button" data-action="remove" class="svps-remove"
+          data-tooltip aria-label="{{localize "SVPS.Gallery.Remove"}}"><i class="fa-solid fa-trash" inert></i></button>
+      </div>
+      {{else}}
+      <span class="svps-card-label">{{pose.label}}</span>
+      {{/if}}
+    </article>
+    {{else}}
+    <p class="svps-empty">{{localize (ifThen editable "SVPS.Gallery.EmptyEdit" "SVPS.Gallery.Empty")}}</p>
+    {{/each}}
+  </section>
+
+  {{#if editable}}
+  <footer class="svps-gallery-foot">
+    <button type="button" data-action="addImage">
+      <i class="fa-solid fa-plus" inert></i> {{localize (ifThen browse "SVPS.Gallery.AddImage" "SVPS.Gallery.AddPose")}}
+    </button>
+    <button type="button" data-action="importFolder" {{#unless browse}}disabled{{/unless}}>
+      <i class="fa-solid fa-folder-open" inert></i> {{localize "SVPS.Gallery.ImportFolder"}}
+    </button>
+    <p class="hint">{{#if browse}}{{localize "SVPS.Gallery.ImportHint"}}{{else}}{{localize "SVPS.Gallery.NoBrowse"}}{{/if}}</p>
+  </footer>
+  {{/if}}
+</div>

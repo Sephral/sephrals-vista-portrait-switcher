@@ -1,0 +1,16 @@
+{
+  "name": "sephrals-vista-portrait-switcher",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check scripts/config.mjs && node --check scripts/controls.mjs && node --check scripts/gallery.mjs && node --check scripts/hud.mjs && node --check scripts/poses.mjs && node --check scripts/settings.mjs && node --check scripts/svps.mjs && node --check scripts/vista.mjs",
+    "check:manifest": "node build/validate-manifest.mjs",
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage",
+    "release:prepare": "node build/prepare-release.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

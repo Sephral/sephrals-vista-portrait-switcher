@@ -1,0 +1,122 @@
+{
+  "SVPS": {
+    "OwnPortrait": "Own portrait",
+    "Light": "Light",
+    "HUD": {
+      "Button": "Vista portraits",
+      "Light": "Light variants on/off",
+      "Reset": "Show the character's own portrait",
+      "Gallery": "Open the gallery",
+      "Empty": "No portraits yet. Open the gallery to add images."
+    },
+    "Chat": {
+      "Changed": "{name} – {pose}"
+    },
+    "Notify": {
+      "NoPermission": "You may not change the Vista portrait of {name}.",
+      "UnknownPose": "{name} has no portrait \"{pose}\".",
+      "SelectTokens": "Select the tokens of {name} in this Vista first.",
+      "MissingImage": "The image could not be loaded: {src}",
+      "UpdateFailed": "The tokens in {scene} could not be changed (see the console).",
+      "NoTokens": "{name} has no token in a Vista. New Vista tokens start with this portrait."
+    },
+    "Gallery": {
+      "Title": "Vista portraits: {name}",
+      "Open": "Vista portraits",
+      "HintSwitch": "Click a portrait to show it in the Vistas.",
+      "HintEdit": "Changes are saved immediately.",
+      "HintUnlinked": "This actor's tokens are not linked: a portrait is shown on the tokens you have selected.",
+      "Apply": "Show \"{pose}\"",
+      "Label": "Name",
+      "Image": "Image",
+      "LightImage": "With light (optional)",
+      "Height": "Height",
+      "HeightHint": "Height of the figure in feet. Empty: the character's portrait height. Lower it for kneeling or crouching poses.",
+      "Mirror": "Mirror",
+      "MirrorHint": "The figure in this image faces the other way than in the character's own portrait.",
+      "MoveUp": "Move to the front",
+      "MoveDown": "Move to the back",
+      "Remove": "Remove from the gallery (the file stays)",
+      "Empty": "No portraits yet.",
+      "EmptyEdit": "No portraits yet. Add single images or import a whole folder.",
+      "AddImage": "Add image",
+      "AddPose": "Add portrait",
+      "NewPose": "New portrait",
+      "ImportFolder": "Import folder",
+      "ImportHint": "Folder import: images ending in \"-light\" or \"-licht\" become the light variant of the image with the same name.",
+      "NoBrowse": "You may not browse files: add a portrait and type the image path.",
+      "NothingNew": "These images are already in the gallery.",
+      "Added": "{poses} portrait(s) added, {light} light variant(s) assigned.",
+      "NoImages": "No images found in {path}.",
+      "FolderFailed": "The folder {path} could not be read (see the console)."
+    },
+    "SETTINGS": {
+      "playerSwitch": {
+        "name": "Players switch portraits",
+        "hint": "Players may switch the Vista portraits of the characters they own."
+      },
+      "playerEdit": {
+        "name": "Players edit galleries",
+        "hint": "Players may add, rename and remove the portraits of the characters they own."
+      },
+      "applyTo": {
+        "name": "A switch changes",
+        "hint": "Which tokens of a character change: in every Vista, or only in the Vista where the switch was made. Unlinked tokens always change alone.",
+        "all": "All Vista tokens of the character",
+        "scene": "Only the tokens in the current Vista"
+      },
+      "newTokens": {
+        "name": "New tokens keep the portrait",
+        "hint": "A character placed in a Vista starts with the portrait chosen last instead of the actor image."
+      },
+      "transition": {
+        "name": "Transition",
+        "hint": "How the old portrait turns into the new one (Foundry's token transitions).",
+        "none": "None (switch instantly)"
+      },
+      "transitionDuration": {
+        "name": "Transition duration (ms)",
+        "hint": "Duration of the transition in milliseconds."
+      },
+      "chatNotice": {
+        "name": "Announce in chat",
+        "hint": "Post a short chat message with the new portrait whenever a character changes its pose."
+      },
+      "hudButton": {
+        "name": "Button in the token HUD",
+        "hint": "Show the mask button with the portrait palette when you right-click a token in a Vista."
+      }
+    },
+    "TRANSITIONS": {
+      "fade": "Fade",
+      "dots": "Dots",
+      "crosshatch": "Crosshatch",
+      "glitch": "Glitch",
+      "hole": "Hole",
+      "holeSwirl": "Hole swirl",
+      "hologram": "Hologram",
+      "morph": "Morph",
+      "swirl": "Swirl",
+      "waterDrop": "Water drop",
+      "waves": "Waves",
+      "wind": "Wind",
+      "whiteNoise": "White noise"
+    },
+    "KEYS": {
+      "pose1": {"name": "Portrait 1", "hint": "Show the first portrait of the selected token or your character (in a Vista)."},
+      "pose2": {"name": "Portrait 2", "hint": "Show the second portrait."},
+      "pose3": {"name": "Portrait 3", "hint": "Show the third portrait."},
+      "pose4": {"name": "Portrait 4", "hint": "Show the fourth portrait."},
+      "pose5": {"name": "Portrait 5", "hint": "Show the fifth portrait."},
+      "pose6": {"name": "Portrait 6", "hint": "Show the sixth portrait."},
+      "pose7": {"name": "Portrait 7", "hint": "Show the seventh portrait."},
+      "pose8": {"name": "Portrait 8", "hint": "Show the eighth portrait."},
+      "pose9": {"name": "Portrait 9", "hint": "Show the ninth portrait."},
+      "poseReset": {"name": "Own portrait", "hint": "Show the character's own portrait (the actor image)."},
+      "poseNext": {"name": "Next portrait", "hint": "Show the next portrait of the gallery."},
+      "posePrevious": {"name": "Previous portrait", "hint": "Show the previous portrait of the gallery."},
+      "toggleLight": {"name": "Light variants on/off", "hint": "Switch to the light variants of the portraits and back."},
+      "openGallery": {"name": "Open the gallery", "hint": "Open the Vista portrait gallery of the selected token or your character."}
+    }
+  }
+}

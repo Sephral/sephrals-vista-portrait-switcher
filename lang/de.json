@@ -1,0 +1,122 @@
+{
+  "SVPS": {
+    "OwnPortrait": "Eigenes Porträt",
+    "Light": "Licht",
+    "HUD": {
+      "Button": "Vista-Porträts",
+      "Light": "Lichtfassungen an/aus",
+      "Reset": "Eigenes Porträt des Charakters zeigen",
+      "Gallery": "Galerie öffnen",
+      "Empty": "Noch keine Porträts. Öffne die Galerie, um Bilder hinzuzufügen."
+    },
+    "Chat": {
+      "Changed": "{name} – {pose}"
+    },
+    "Notify": {
+      "NoPermission": "Du darfst das Vista-Porträt von {name} nicht ändern.",
+      "UnknownPose": "{name} hat kein Porträt „{pose}“.",
+      "SelectTokens": "Wähle zuerst die Token von {name} in dieser Vista aus.",
+      "MissingImage": "Das Bild konnte nicht geladen werden: {src}",
+      "UpdateFailed": "Die Token in {scene} konnten nicht geändert werden (siehe Konsole).",
+      "NoTokens": "{name} hat kein Token in einer Vista. Neue Vista-Token beginnen mit diesem Porträt."
+    },
+    "Gallery": {
+      "Title": "Vista-Porträts: {name}",
+      "Open": "Vista-Porträts",
+      "HintSwitch": "Klicke ein Porträt an, um es in den Vistas zu zeigen.",
+      "HintEdit": "Änderungen werden sofort gespeichert.",
+      "HintUnlinked": "Die Token dieses Akteurs sind nicht verknüpft: Ein Porträt erscheint auf den Token, die du ausgewählt hast.",
+      "Apply": "„{pose}“ zeigen",
+      "Label": "Name",
+      "Image": "Bild",
+      "LightImage": "Mit Licht (optional)",
+      "Height": "Höhe",
+      "HeightHint": "Höhe der Figur in Fuß. Leer: die Porträthöhe des Charakters. Für kniende oder geduckte Posen kleiner wählen.",
+      "Mirror": "Spiegeln",
+      "MirrorHint": "Die Figur auf diesem Bild schaut in die andere Richtung als im eigenen Porträt des Charakters.",
+      "MoveUp": "Nach vorn",
+      "MoveDown": "Nach hinten",
+      "Remove": "Aus der Galerie entfernen (die Datei bleibt)",
+      "Empty": "Noch keine Porträts.",
+      "EmptyEdit": "Noch keine Porträts. Füge einzelne Bilder hinzu oder importiere einen ganzen Ordner.",
+      "AddImage": "Bild hinzufügen",
+      "AddPose": "Porträt hinzufügen",
+      "NewPose": "Neues Porträt",
+      "ImportFolder": "Ordner importieren",
+      "ImportHint": "Ordnerimport: Bilder, deren Name auf „-licht“ oder „-light“ endet, werden zur Lichtfassung des gleichnamigen Bildes.",
+      "NoBrowse": "Du darfst keine Dateien durchsuchen: Füge ein Porträt hinzu und trage den Bildpfad ein.",
+      "NothingNew": "Diese Bilder sind schon in der Galerie.",
+      "Added": "{poses} Porträt(s) hinzugefügt, {light} Lichtfassung(en) zugeordnet.",
+      "NoImages": "In {path} wurden keine Bilder gefunden.",
+      "FolderFailed": "Der Ordner {path} konnte nicht gelesen werden (siehe Konsole)."
+    },
+    "SETTINGS": {
+      "playerSwitch": {
+        "name": "Spieler wechseln Porträts",
+        "hint": "Spieler dürfen die Vista-Porträts der Charaktere wechseln, die ihnen gehören."
+      },
+      "playerEdit": {
+        "name": "Spieler bearbeiten Galerien",
+        "hint": "Spieler dürfen die Porträts ihrer eigenen Charaktere hinzufügen, umbenennen und entfernen."
+      },
+      "applyTo": {
+        "name": "Ein Wechsel ändert",
+        "hint": "Welche Token eines Charakters wechseln: in allen Vistas oder nur in der Vista, in der gewechselt wurde. Nicht verknüpfte Token wechseln immer einzeln.",
+        "all": "Alle Vista-Token des Charakters",
+        "scene": "Nur die Token in der aktuellen Vista"
+      },
+      "newTokens": {
+        "name": "Neue Token behalten das Porträt",
+        "hint": "Ein Charakter, der in eine Vista gesetzt wird, beginnt mit dem zuletzt gewählten Porträt statt mit dem Akteurbild."
+      },
+      "transition": {
+        "name": "Übergang",
+        "hint": "Wie das alte Porträt in das neue übergeht (Token-Übergänge von Foundry).",
+        "none": "Keiner (sofort wechseln)"
+      },
+      "transitionDuration": {
+        "name": "Dauer des Übergangs (ms)",
+        "hint": "Dauer des Übergangs in Millisekunden."
+      },
+      "chatNotice": {
+        "name": "Im Chat ankündigen",
+        "hint": "Bei jedem Posenwechsel eine kurze Chatnachricht mit dem neuen Porträt posten."
+      },
+      "hudButton": {
+        "name": "Knopf im Token-HUD",
+        "hint": "Beim Rechtsklick auf ein Token in einer Vista den Maskenknopf mit der Porträtleiste zeigen."
+      }
+    },
+    "TRANSITIONS": {
+      "fade": "Überblenden",
+      "dots": "Punkte",
+      "crosshatch": "Schraffur",
+      "glitch": "Glitch",
+      "hole": "Loch",
+      "holeSwirl": "Strudelloch",
+      "hologram": "Hologramm",
+      "morph": "Morphen",
+      "swirl": "Wirbel",
+      "waterDrop": "Wassertropfen",
+      "waves": "Wellen",
+      "wind": "Wind",
+      "whiteNoise": "Rauschen"
+    },
+    "KEYS": {
+      "pose1": {"name": "Porträt 1", "hint": "Das erste Porträt des ausgewählten Tokens oder deines Charakters zeigen (in einer Vista)."},
+      "pose2": {"name": "Porträt 2", "hint": "Das zweite Porträt zeigen."},
+      "pose3": {"name": "Porträt 3", "hint": "Das dritte Porträt zeigen."},
+      "pose4": {"name": "Porträt 4", "hint": "Das vierte Porträt zeigen."},
+      "pose5": {"name": "Porträt 5", "hint": "Das fünfte Porträt zeigen."},
+      "pose6": {"name": "Porträt 6", "hint": "Das sechste Porträt zeigen."},
+      "pose7": {"name": "Porträt 7", "hint": "Das siebte Porträt zeigen."},
+      "pose8": {"name": "Porträt 8", "hint": "Das achte Porträt zeigen."},
+      "pose9": {"name": "Porträt 9", "hint": "Das neunte Porträt zeigen."},
+      "poseReset": {"name": "Eigenes Porträt", "hint": "Das eigene Porträt des Charakters (das Akteurbild) zeigen."},
+      "poseNext": {"name": "Nächstes Porträt", "hint": "Das nächste Porträt der Galerie zeigen."},
+      "posePrevious": {"name": "Voriges Porträt", "hint": "Das vorige Porträt der Galerie zeigen."},
+      "toggleLight": {"name": "Lichtfassungen an/aus", "hint": "Zu den Lichtfassungen der Porträts wechseln und zurück."},
+      "openGallery": {"name": "Galerie öffnen", "hint": "Die Vista-Porträtgalerie des ausgewählten Tokens oder deines Charakters öffnen."}
+    }
+  }
+}
