@@ -4,7 +4,7 @@
  */
 
 import {MODULE_ID, TEMPLATES, makeId} from "./config.mjs";
-import {cleanPortrait, posesFromFiles} from "./poses.mjs";
+import {alternateFiles, cleanPortrait, fileStem, posesFromFiles} from "./poses.mjs";
 import {applyPose, canEdit, canSwitch, getPoses, poseState, savePoses} from "./vista.mjs";
 
 const {ApplicationV2, HandlebarsApplicationMixin} = foundry.applications.api;
@@ -73,6 +73,7 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
       reset: PortraitGallery.#onReset,
       addImage: PortraitGallery.#onAddImage,
       importFolder: PortraitGallery.#onImportFolder,
+      suggest: PortraitGallery.#onSuggest,
       moveUp: PortraitGallery.#onMove,
       moveDown: PortraitGallery.#onMove,
       remove: PortraitGallery.#onRemove
@@ -236,8 +237,7 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
       current: current?.split("/").slice(0, -1).join("/"),
       callback: async path => {
         try {
-          const result = await FilePicker.browse(picker.activeSource, path, {extensions: imageExtensions()});
-          const files = (result.files ?? []).filter(f => imageExtensions().some(e => f.toLowerCase().endsWith(e)));
+          const files = await browseImages(picker.activeSource, path, picker.source?.bucket);
           if ( !files.length ) {
             ui.notifications.warn(_loc("SVPS.Gallery.NoImages", {path}));
             return;
@@ -250,6 +250,24 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
       }
     });
     picker.render({force: true});
+  }
+
+  /* -------------------------------------------- */
+
+  /**
+   * Look for variants of the actor's portrait and token image next to them and add the ones the user picks.
+   * @this {PortraitGallery}
+   */
+  static async #onSuggest() {
+    if ( !game.user.can("FILES_BROWSE") ) return;
+    const {files, failed} = await findAlternates(this.actor, getPoses(this.actor));
+    if ( !files.length ) {
+      if ( failed.length ) ui.notifications.error(_loc("SVPS.Gallery.FolderFailed", {path: failed.join(", ")}));
+      else ui.notifications.info(_loc("SVPS.Suggest.None"));
+      return;
+    }
+    const picked = await pickAlternates(this.actor, files);
+    if ( picked.length ) await this.#addFiles(picked);
   }
 
   /* -------------------------------------------- */
@@ -290,4 +308,91 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
  */
 function imageExtensions() {
   return Object.keys(CONST.IMAGE_FILE_EXTENSIONS).map(e => `.${e}`);
+}
+
+/* -------------------------------------------- */
+
+/**
+ * The image files of a folder.
+ * @param {string} source       A file source of Foundry's file picker ("data", "s3", "forgevtt" …)
+ * @param {string} target       The folder within the source
+ * @param {string} [bucket]     The bucket of an S3 source
+ * @returns {Promise<string[]>}
+ */
+async function browseImages(source, target, bucket) {
+  const FilePicker = foundry.applications.apps.FilePicker.implementation;
+  const extensions = imageExtensions();
+  const options = {extensions};
+  if ( (source === "s3") && bucket ) options.bucket = bucket;
+  const result = await FilePicker.browse(source, target, options);
+  return (result.files ?? []).filter(f => extensions.some(e => f.toLowerCase().endsWith(e)));
+}
+
+/* -------------------------------------------- */
+
+/**
+ * Images next to the actor's portrait and its token image whose names continue theirs ("merchant-angry.webp" next
+ * to "merchant.webp"). The file picker works out source and folder of each image, as it does when it opens on it.
+ * @param {Actor} actor
+ * @param {import("./poses.mjs").VistaPose[]} existing    Poses already in the gallery
+ * @returns {Promise<{files: string[], failed: string[]}>}  The variants and the folders which could not be read
+ */
+async function findAlternates(actor, existing) {
+  const token = actor.prototypeToken;
+  const references = [...new Set([actor.img, token.randomImg ? null : token.texture.src])]
+    .filter(src => src && (src !== CONST.DEFAULT_TOKEN) && !src.includes("*"));
+  const FilePicker = foundry.applications.apps.FilePicker.implementation;
+  const files = [];
+  const failed = [];
+  const browsed = new Set();
+  for ( const src of references ) {
+    let target = src.split("/").slice(0, -1).join("/");
+    try {
+      const picker = new FilePicker({type: "image", current: src}); // Never rendered
+      const source = picker.activeSource;
+      const bucket = picker.source?.bucket;
+      target = picker.source?.target ?? "";
+      if ( !target && src.includes("/") ) continue; // An address the file picker cannot browse
+      const key = `${source}:${bucket ?? ""}:${target}`;
+      if ( browsed.has(key) ) continue;
+      browsed.add(key);
+      files.push(...await browseImages(source, target, bucket));
+    } catch(err) {
+      console.warn(`${MODULE_ID} | Could not read the folder of ${src}`, err);
+      failed.push(target);
+    }
+  }
+  return {files: alternateFiles(files, references, {existing}), failed};
+}
+
+/* -------------------------------------------- */
+
+/**
+ * Let the user tick the variants to add.
+ * @param {Actor} actor
+ * @param {string[]} files
+ * @returns {Promise<string[]>}  The ticked files, none if the dialog was closed
+ */
+async function pickAlternates(actor, files) {
+  const escape = foundry.utils.escapeHTML;
+  const items = files.map(src => `<label class="svps-suggestion" data-tooltip="${escape(src)}">
+    <input type="checkbox" name="files" value="${escape(src)}" checked>
+    <img src="${escape(src)}" alt="" loading="lazy" decoding="async">
+    <span>${escape(fileStem(src))}</span></label>`);
+  const content = document.createElement("div");
+  content.innerHTML = `<p class="hint">${escape(_loc("SVPS.Suggest.Intro"))}</p>
+    <div class="svps-suggestions">${items.join("")}</div>`;
+  const picked = await foundry.applications.api.DialogV2.wait({
+    window: {title: _loc("SVPS.Suggest.Title", {name: actor.name}), icon: "fa-solid fa-wand-magic-sparkles"},
+    classes: ["svps-suggest"],
+    position: {width: 560},
+    content,
+    buttons: [{
+      action: "add", label: "SVPS.Suggest.Add", icon: "fa-solid fa-plus", default: true,
+      callback: (event, button) => Array.from(button.form.querySelectorAll('input[name="files"]:checked'), i => i.value)
+    }, {
+      action: "cancel", label: "Cancel", icon: "fa-solid fa-xmark"
+    }]
+  });
+  return Array.isArray(picked) ? picked : [];
 }

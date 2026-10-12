@@ -19,7 +19,8 @@ The demo uses its own characters and a market backdrop of its own instead of Emb
 * **Moods at a click:** right click an NPC in a Vista and pick a portrait from the palette in the token HUD. The figure changes with a soft transition, and the palette stays open for the next change.
 * **A gallery per character:** as many portraits as you like, for moods, outfits, poses or disguises. Name them, sort them, mirror them.
 * **Folder import:** point the gallery at a folder and every image becomes a portrait, named after its file.
-* **Ember's own portraits:** Ember already ships more than one portrait for some NPCs, for example with a cloak or in festive clothes. Add them to the gallery and switch between them.
+* **Suggested alternates:** the gallery looks next to the actor image and the token image for files whose names start the same way, for example `merchant_angry.webp` next to `merchant.webp`. Tick the ones you want. Nothing is copied, the gallery only keeps the paths.
+* **Ember's own portraits:** Ember already ships more than one portrait for some NPCs, for example with a cloak or in festive clothes. *Suggest alternates* finds them, and you can switch between them.
 * **Fits any figure:** each portrait can have its own height, so kneeling or sitting figures keep the right size. The figure keeps its place in the Vista.
 * **Groups of NPCs:** unlinked tokens switch one by one, so every guard of a squad can show a different mood.
 * **Remembers the choice:** a linked character keeps its portrait, and new tokens in a Vista start with it.
@@ -31,7 +32,7 @@ The demo uses its own characters and a market backdrop of its own instead of Emb
 
 1. Enable the module in your Ember world.
 2. Open the gallery of an NPC: right click the actor in the actor directory and choose *Vista portraits*, or use the entry in the header menu of the actor sheet.
-3. Add images one by one or import a whole folder.
+3. Add images one by one, import a whole folder or let the gallery suggest alternates.
 4. In a Vista, right click the NPC, click the mask button in the token HUD and pick a portrait. *Own portrait* brings back the actor image.
 
 Changes are saved immediately and everyone sees them.

@@ -23,7 +23,7 @@
     <article class="svps-card {{#if pose.active}}active{{/if}}" data-pose-id="{{pose.id}}" data-index="{{pose.index}}">
       <button type="button" class="svps-thumb" data-action="apply" {{#unless @root.switchable}}disabled{{/unless}}
         data-tooltip aria-label="{{localize "SVPS.Gallery.Apply" pose=pose.label}}">
-        {{#if pose.thumb}}<img src="{{pose.thumb}}" alt="" {{#if pose.mirror}}class="svps-mirrored"{{/if}}>{{else}}<i class="fa-solid fa-image" inert></i>{{/if}}
+        {{#if pose.thumb}}<img src="{{pose.thumb}}" alt="" loading="lazy" decoding="async" {{#if pose.mirror}}class="svps-mirrored"{{/if}}>{{else}}<i class="fa-solid fa-image" inert></i>{{/if}}
       </button>
       {{#if @root.editable}}
       <input type="hidden" name="poses.{{pose.index}}.id" value="{{pose.id}}">
@@ -69,6 +69,9 @@
     </button>
     <button type="button" data-action="importFolder" {{#unless browse}}disabled{{/unless}}>
       <i class="fa-solid fa-folder-open" inert></i> {{localize "SVPS.Gallery.ImportFolder"}}
+    </button>
+    <button type="button" data-action="suggest" data-tooltip="{{localize "SVPS.Suggest.Hint"}}" {{#unless browse}}disabled{{/unless}}>
+      <i class="fa-solid fa-wand-magic-sparkles" inert></i> {{localize "SVPS.Suggest.Button"}}
     </button>
     <p class="hint">{{#if browse}}{{localize "SVPS.Gallery.ImportHint"}}{{else}}{{localize "SVPS.Gallery.NoBrowse"}}{{/if}}</p>
   </footer>

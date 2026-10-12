@@ -227,6 +227,50 @@ export function posesFromFiles(paths, {existing=[], makeId, preferred}={}) {
 }
 
 /* -------------------------------------------- */
+
+/**
+ * Does a file name continue another one, as variants of a portrait do? After the shared beginning comes a separator,
+ * a number or a new word: "merchant" → "merchant-angry", "merchant_2", "MerchantCloak", but not "merchants".
+ * @param {string} stem
+ * @param {string} base
+ * @returns {boolean}
+ */
+export function sharesStem(stem, base) {
+  stem = String(stem ?? "");
+  base = String(base ?? "");
+  if ( !base || !stem.toLowerCase().startsWith(base.toLowerCase()) ) return false;
+  if ( stem.length === base.length ) return true;
+  const last = base.at(-1);
+  const next = stem.charAt(base.length);
+  if ( /\p{L}/u.test(last) && /\p{Ll}/u.test(next) ) return false; // The word goes on
+  return !(/\d/.test(last) && /\d/.test(next));                    // The number goes on: "guard-1", "guard-12"
+}
+
+/* -------------------------------------------- */
+
+/**
+ * The images of a folder which look like variants of some portraits, sorted by name. The portraits themselves and
+ * images already in the gallery are left out.
+ * @param {string[]} files                     Image paths of the folder
+ * @param {string[]} references                The portraits whose variants are wanted
+ * @param {object} [options]
+ * @param {VistaPose[]} [options.existing]     Poses already in the gallery
+ * @returns {string[]}
+ */
+export function alternateFiles(files, references, {existing=[]}={}) {
+  references = references.filter(Boolean).map(withoutQuery);
+  const bases = references.map(fileStem).filter(Boolean);
+  const known = new Set(existing.map(p => p.src).filter(Boolean).map(withoutQuery).concat(references));
+  const found = new Map();
+  for ( const file of files ) {
+    const path = withoutQuery(file);
+    if ( !path || known.has(path) || found.has(path) ) continue;
+    if ( bases.some(base => sharesStem(fileStem(file), base)) ) found.set(path, file);
+  }
+  return [...found.values()].sort((a, b) => fileStem(a).localeCompare(fileStem(b)));
+}
+
+/* -------------------------------------------- */
 /*  Portrait math                               */
 /* -------------------------------------------- */
 

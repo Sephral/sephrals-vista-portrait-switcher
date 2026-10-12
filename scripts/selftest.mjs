@@ -8,16 +8,18 @@ import {usablePoses} from "./poses.mjs";
 import {getPoses, imageAspect, isVistaScene} from "./vista.mjs";
 
 /**
- * Check Ember's Vista API, the Vista scenes of the world and Foundry's texture transitions.
- * @returns {{problems: string[], vistas: number}}
+ * Check Ember's Vista API, the Vista scenes of the world and Foundry's texture transitions. Notes are no problems,
+ * e.g. a world without Vistas before Ember's adventure is imported.
+ * @returns {{problems: string[], notes: string[], vistas: number}}
  */
 function checkIntegrations() {
   const problems = [];
+  const notes = [];
   if ( !game.modules.get("ember")?.active ) problems.push(_loc("SVPS.SELFTEST.EmberInactive"));
   if ( !globalThis.ember?.api?.canvas?.sceneManagers?.EmberVista ) problems.push(_loc("SVPS.SELFTEST.VistaClass"));
   if ( !CONFIG.Canvas.managedScenes ) problems.push(_loc("SVPS.SELFTEST.ManagedScenes"));
   const vistaScenes = game.scenes.filter(isVistaScene);
-  if ( !vistaScenes.length ) problems.push(_loc("SVPS.SELFTEST.NoVistas"));
+  if ( !vistaScenes.length ) notes.push(_loc("SVPS.SELFTEST.NoVistas"));
   const vistaTokens = vistaScenes.flatMap(s => s.tokens.contents);
   if ( vistaTokens.length && !vistaTokens.some(t => foundry.utils.hasProperty(t, "flags.ember.portrait")) ) {
     problems.push(_loc("SVPS.SELFTEST.PortraitFlag"));
@@ -25,7 +27,7 @@ function checkIntegrations() {
   const types = Object.values(foundry.canvas.rendering?.filters?.TextureTransitionFilter?.TYPES ?? {});
   const unknown = TRANSITIONS.filter(t => !types.includes(t));
   if ( unknown.length ) problems.push(_loc("SVPS.SELFTEST.Transitions", {types: unknown.join(", ")}));
-  return {problems, vistas: vistaScenes.length};
+  return {problems, notes, vistas: vistaScenes.length};
 }
 
 /* -------------------------------------------- */
@@ -69,11 +71,12 @@ function versionLine() {
  * Run the self-test and report the result as a notification and a whispered chat message.
  * @param {object} [options]
  * @param {boolean} [options.report=true]   Post the chat report
- * @returns {Promise<{integrations: string[], vistas: number, galleries: number, images: number, missing: string[]}>}
+ * @returns {Promise<{integrations: string[], notes: string[], vistas: number, galleries: number, images: number,
+ *   missing: string[]}>}
  */
 export async function runSelfTest({report=true}={}) {
   ui.notifications.info(_loc("SVPS.SELFTEST.Started"));
-  const {problems: integrations, vistas} = checkIntegrations();
+  const {problems: integrations, notes, vistas} = checkIntegrations();
   const {galleries, images, missing} = await checkImages();
   const versions = versionLine();
   const summary = _loc("SVPS.SELFTEST.Summary", {vistas, galleries, images, missing: missing.length,
@@ -83,6 +86,7 @@ export async function runSelfTest({report=true}={}) {
   console.log(versions);
   if ( integrations.length ) console.warn("Integrations:", integrations);
   if ( missing.length ) console.warn("Missing images:", missing);
+  if ( notes.length ) console.info("Notes:", notes);
   console.groupEnd();
 
   if ( integrations.length || missing.length ) ui.notifications.warn(summary, {permanent: true});
@@ -94,10 +98,11 @@ export async function runSelfTest({report=true}={}) {
     let content = `<h3>${_loc("SVPS.SELFTEST.Title")}</h3><p>${escape(summary)}</p><p><small>${escape(versions)}</small></p>`;
     if ( integrations.length ) content += `<h4>${_loc("SVPS.SELFTEST.Integrations")}</h4>${list(integrations)}`;
     if ( missing.length ) content += `<h4>${_loc("SVPS.SELFTEST.Missing")}</h4>${list(missing)}`;
+    if ( notes.length ) content += `<h4>${_loc("SVPS.SELFTEST.Notes")}</h4>${list(notes)}`;
     const cls = foundry.documents.ChatMessage.implementation;
     await cls.create({content, whisper: [game.user.id], speaker: {alias: game.modules.get(MODULE_ID).title}});
   }
-  return {integrations, vistas, galleries, images, missing};
+  return {integrations, notes, vistas, galleries, images, missing};
 }
 
 /* -------------------------------------------- */

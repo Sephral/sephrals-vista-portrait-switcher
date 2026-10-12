@@ -4,7 +4,7 @@
  * data in `flags.ember.portrait`, so a new image only needs the texture, the portrait data and a scaled size.
  */
 
-import {MODULE_ID, makeId, setting} from "./config.mjs";
+import {MODULE_ID, makeId, mapLimit, setting} from "./config.mjs";
 import {
   cleanPortrait, cyclePose, findPose, flippedScaleX, normalizePoses, posePortrait, scaledSize, usablePoses
 } from "./poses.mjs";
@@ -104,6 +104,9 @@ export function imageAspect(src) {
 
 /* -------------------------------------------- */
 
+/** How many images are measured at the same time. */
+const ASPECT_CONCURRENCY = 6;
+
 /**
  * Store a gallery on an actor. The proportions of every image are measured and kept with the pose, so new tokens
  * can be sized without waiting for an image.
@@ -113,7 +116,8 @@ export function imageAspect(src) {
  */
 export async function savePoses(actor, poses) {
   const normalized = normalizePoses(poses, makeId);
-  for ( const pose of normalized ) pose.aspect = (await imageAspect(pose.src)) ?? pose.aspect;
+  const measured = await mapLimit(normalized, ASPECT_CONCURRENCY, pose => imageAspect(pose.src));
+  for ( const [i, pose] of normalized.entries() ) pose.aspect = measured[i] ?? pose.aspect;
   await actor.update({[`flags.${MODULE_ID}.poses`]: normalized});
   return normalized;
 }

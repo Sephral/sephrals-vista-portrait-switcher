@@ -47,6 +47,14 @@
       "NoImages": "In {path} wurden keine Bilder gefunden.",
       "FolderFailed": "Der Ordner {path} konnte nicht gelesen werden (siehe Konsole)."
     },
+    "Suggest": {
+      "Button": "Varianten vorschlagen",
+      "Hint": "Sucht neben dem Akteurbild und dem Tokenbild nach Bildern, deren Name genauso beginnt, zum Beispiel haendler_wuetend.webp neben haendler.webp.",
+      "Title": "Porträtvarianten: {name}",
+      "Intro": "Diese Bilder liegen neben dem Porträt, und ihre Namen beginnen genauso. Hake die an, die in die Galerie sollen. Gespeichert werden nur die Pfade, die Dateien bleiben, wo sie sind.",
+      "Add": "Auswahl hinzufügen",
+      "None": "Neben dem Porträt wurden keine weiteren Bilder mit gleichem Namensanfang gefunden."
+    },
     "LANGUAGE": {
       "default": "Foundry folgen",
       "de": "Deutsch",
@@ -101,10 +109,11 @@
       "Summary": "Selbsttest Vista Portrait Switcher: {vistas} Vistas, {galleries} Galerien mit {images} Porträts, {missing} fehlende Bilder, {integrations} Hinweise zur Anbindung.",
       "Integrations": "Anbindung",
       "Missing": "Bilder, die nicht geladen werden können",
+      "Notes": "Gut zu wissen",
       "EmberInactive": "Das Modul Ember ist nicht aktiv.",
       "VistaClass": "Embers Vista-Szenenverwaltung wurde nicht gefunden. Vistas werden nur über Embers Szenenliste erkannt.",
       "ManagedScenes": "Foundrys Liste der verwalteten Szenen fehlt.",
-      "NoVistas": "Diese Welt hat keine Vista-Szenen.",
+      "NoVistas": "Diese Welt hat noch keine Vista-Szenen. Das ist normal, solange Embers Abenteuer nicht importiert ist.",
       "PortraitFlag": "Kein Vista-Token trägt Embers Porträtdaten (flags.ember.portrait). Größen können falsch sein.",
       "Transitions": "Foundry kennt diese Übergänge nicht: {types}",
       "Version": "{id} {current} (getestet {tested})",

@@ -47,6 +47,14 @@
       "NoImages": "No images found in {path}.",
       "FolderFailed": "The folder {path} could not be read (see the console)."
     },
+    "Suggest": {
+      "Button": "Suggest alternates",
+      "Hint": "Looks next to the actor image and the token image for images whose names start the same way, for example merchant_angry.webp next to merchant.webp.",
+      "Title": "Alternate portraits: {name}",
+      "Intro": "These images lie next to the portrait and their names start the same way. Tick the ones to add. Only the paths are stored, the files stay where they are.",
+      "Add": "Add selected",
+      "None": "No other images whose names start the same way were found next to the portrait."
+    },
     "LANGUAGE": {
       "default": "Follow Foundry",
       "de": "Deutsch",
@@ -101,10 +109,11 @@
       "Summary": "Vista Portrait Switcher self test: {vistas} Vistas, {galleries} galleries with {images} portraits, {missing} missing images, {integrations} integration notes.",
       "Integrations": "Integration",
       "Missing": "Images that cannot be loaded",
+      "Notes": "Good to know",
       "EmberInactive": "The Ember module is not active.",
       "VistaClass": "Ember's Vista scene manager was not found. Vistas are only recognized by Ember's scene list.",
       "ManagedScenes": "Foundry's list of managed scenes is missing.",
-      "NoVistas": "This world has no Vista scenes.",
+      "NoVistas": "This world has no Vista scenes yet. That is normal until Ember's adventure is imported.",
       "PortraitFlag": "No Vista token carries Ember's portrait data (flags.ember.portrait). Sizes may be wrong.",
       "Transitions": "Foundry does not know these transitions: {types}",
       "Version": "{id} {current} (tested {tested})",

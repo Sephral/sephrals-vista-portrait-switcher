@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  cleanPortrait, commonPrefix, cyclePose, fileStem, findPose, flippedScaleX, labelFromStem, normalizePoses,
-  posePortrait, posesFromFiles, scaledSize, toSizeStep, usablePoses, withoutQuery
+  alternateFiles, cleanPortrait, commonPrefix, cyclePose, fileStem, findPose, flippedScaleX, labelFromStem,
+  normalizePoses, posePortrait, posesFromFiles, scaledSize, sharesStem, toSizeStep, usablePoses, withoutQuery
 } from "../scripts/poses.mjs";
 
 let counter = 0;
@@ -115,6 +115,34 @@ test("posesFromFiles keeps a single file's full name", () => {
   const added = posesFromFiles(["a/night_watch.webp"], {makeId});
   assert.equal(added.length, 1);
   assert.equal(added[0].label, "Night watch");
+});
+
+test("sharesStem accepts separators, numbers and new words after the name", () => {
+  assert.ok(sharesStem("merchant-angry", "merchant"));
+  assert.ok(sharesStem("merchant_2", "merchant"));
+  assert.ok(sharesStem("Merchant Laughing", "merchant"));
+  assert.ok(sharesStem("MerchantCloak", "Merchant"));
+  assert.ok(sharesStem("merchant", "merchant"), "the same name with another extension");
+  assert.ok(sharesStem("guard-1b", "guard-1"));
+  assert.ok(!sharesStem("merchants", "merchant"), "a longer word is another name");
+  assert.ok(!sharesStem("guard-12", "guard-1"), "a longer number is another figure");
+  assert.ok(!sharesStem("innkeeper", "merchant"));
+  assert.ok(!sharesStem("merchant", ""));
+});
+
+test("alternateFiles offers variants next to the portrait and skips the gallery", () => {
+  const dir = "worlds/w/npcs";
+  const files = ["merchant.webp", "merchant-angry.webp", "merchant_2.png", "MerchantCloak.webp", "merchants.webp",
+    "innkeeper.webp", "merchant-sad.webp?12", "notes.txt"].map(f => `${dir}/${f}`);
+  const existing = normalizePoses([{src: `${dir}/merchant-sad.webp`}], makeId);
+  const found = alternateFiles(files, [`${dir}/merchant.webp?1791653960670`], {existing});
+  assert.deepEqual(found, [`${dir}/merchant_2.png`, `${dir}/merchant-angry.webp`, `${dir}/MerchantCloak.webp`],
+    "neither the portrait itself nor a gallery image is offered, the result is sorted by name");
+  assert.deepEqual(alternateFiles(files, [`${dir}/Merchant.webp`, `${dir}/innkeeper.webp`]).length, 5,
+    "the names compare without case, and several portraits are checked at once");
+  assert.deepEqual(alternateFiles([...files, ...files], [`${dir}/MerchantCloak.webp`]), [],
+    "duplicates and the reference itself are dropped");
+  assert.deepEqual(alternateFiles(files, [null, ""]), []);
 });
 
 test("toSizeStep and cleanPortrait follow Ember's data model", () => {

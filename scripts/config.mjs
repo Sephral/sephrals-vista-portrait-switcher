@@ -37,3 +37,23 @@ export function setting(key) {
 export function makeId() {
   return foundry.utils.randomID();
 }
+
+/**
+ * Map items with an async function, running at most `limit` calls at a time. The results keep the order of the items.
+ * @param {Array} items
+ * @param {number} limit
+ * @param {(item: *, index: number) => Promise<*>} fn
+ * @returns {Promise<Array>}
+ */
+export async function mapLimit(items, limit, fn) {
+  const results = new Array(items.length);
+  let next = 0;
+  const worker = async () => {
+    while ( next < items.length ) {
+      const index = next++;
+      results[index] = await fn(items[index], index);
+    }
+  };
+  await Promise.all(Array.from({length: Math.min(Math.max(1, limit), items.length)}, worker));
+  return results;
+}
