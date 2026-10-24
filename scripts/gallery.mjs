@@ -3,7 +3,7 @@
  * and mirroring, sort them – and switch to a portrait with a click.
  */
 
-import {MODULE_ID, TEMPLATES, makeId} from "./config.mjs";
+import {MODULE_ID, TEMPLATES, addSettingsGear, makeId} from "./config.mjs";
 import {alternateFiles, cleanPortrait, fileStem, posesFromFiles} from "./poses.mjs";
 import {applyPose, canEdit, canSwitch, getPoses, poseState, savePoses} from "./vista.mjs";
 
@@ -118,6 +118,13 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 
   /* -------------------------------------------- */
+
+  /** @inheritDoc */
+  async _renderFrame(options) {
+    const frame = await super._renderFrame(options);
+    addSettingsGear(frame);
+    return frame;
+  }
 
   /** @inheritDoc */
   async _onFirstRender(context, options) {

@@ -57,3 +57,28 @@ export async function mapLimit(items, limit, fn) {
   await Promise.all(Array.from({length: Math.min(Math.max(1, limit), items.length)}, worker));
   return results;
 }
+
+/**
+ * Put a gear into the title bar of a window that opens the settings of this module. Players only get it when the
+ * module has settings for them.
+ * @param {HTMLElement} frame   The window frame
+ */
+export function addSettingsGear(frame) {
+  const header = frame?.querySelector(".window-header");
+  if ( !header || header.querySelector(".svps-settings") ) return;
+  const own = s => (s.namespace === MODULE_ID) && s.config && (s.scope !== "world");
+  if ( !game.user.isGM && !Array.from(game.settings.settings.values()).some(own) ) return;
+  const gear = document.createElement("button");
+  gear.type = "button";
+  gear.className = "header-control icon fa-solid fa-gear svps-settings";
+  gear.dataset.tooltip = _loc("SVPS.Gallery.Settings");
+  gear.setAttribute("aria-label", _loc("SVPS.Gallery.Settings"));
+  gear.addEventListener("click", event => {
+    event.preventDefault();
+    event.stopPropagation();
+    game.modules.get(MODULE_ID).api?.openSettings();
+  });
+  const anchor = header.querySelector("[data-action=toggleControls]") ?? header.querySelector("[data-action=close]");
+  if ( anchor ) anchor.before(gear);
+  else header.append(gear);
+}

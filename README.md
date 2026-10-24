@@ -41,7 +41,7 @@ The module needs your copy of the Ember module and contains no Ember content its
 
 ## Learn more
 
-Questions or ideas? Join us on [Discord](https://discord.gg/7BjCgDYaBP). Looking for more? See [all modules by Sephral](https://github.com/Sephral).
+Every setting, the self test and the macro API are in the [manual](MANUAL.md). Questions or ideas? Join us on [Discord](https://discord.gg/7BjCgDYaBP). Looking for more? See [all modules by Sephral](https://github.com/Sephral).
 
 ## License
 

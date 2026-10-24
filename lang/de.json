@@ -45,7 +45,8 @@
       "NothingNew": "Diese Bilder sind schon in der Galerie.",
       "Added": "{poses} Porträt(s) hinzugefügt.",
       "NoImages": "In {path} wurden keine Bilder gefunden.",
-      "FolderFailed": "Der Ordner {path} konnte nicht gelesen werden (siehe Konsole)."
+      "FolderFailed": "Der Ordner {path} konnte nicht gelesen werden (siehe Konsole).",
+      "Settings": "Einstellungen"
     },
     "Suggest": {
       "Button": "Varianten vorschlagen",

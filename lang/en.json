@@ -45,7 +45,8 @@
       "NothingNew": "These images are already in the gallery.",
       "Added": "{poses} portrait(s) added.",
       "NoImages": "No images found in {path}.",
-      "FolderFailed": "The folder {path} could not be read (see the console)."
+      "FolderFailed": "The folder {path} could not be read (see the console).",
+      "Settings": "Settings"
     },
     "Suggest": {
       "Button": "Suggest alternates",
