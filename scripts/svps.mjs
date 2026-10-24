@@ -5,12 +5,18 @@ import {onRenderTokenHUD} from "./hud.mjs";
 import {applyModuleLanguage} from "./language.mjs";
 import {noticeNewVersions, runSelfTest} from "./selftest.mjs";
 import {openSettings, registerSettings} from "./settings.mjs";
+import {registerUsage} from "./usage.mjs";
 import {
   applyPose, getPoses, isVistaScene, onPreCreateToken, poseState, posesOf, resolveTarget, savePoses, stepPose
 } from "./vista.mjs";
 
 Hooks.once("init", () => {
   registerSettings();
+  registerUsage(MODULE_ID, {
+    features: ["portraitSwitch", "hudSwitch", "gallerySwitch", "galleryOpened", "imagesAdded", "folderImport",
+      "suggestVariants"],
+    settings: ["playerSwitch", "applyTo", "transition"]
+  });
 
   Hooks.on("renderTokenHUD", onRenderTokenHUD);
   Hooks.on("preCreateToken", onPreCreateToken);

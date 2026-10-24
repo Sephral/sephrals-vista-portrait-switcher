@@ -5,6 +5,7 @@
 
 import {MODULE_ID, TEMPLATES, addSettingsGear, makeId} from "./config.mjs";
 import {alternateFiles, cleanPortrait, fileStem, posesFromFiles} from "./poses.mjs";
+import {countFeature} from "./usage.mjs";
 import {applyPose, canEdit, canSwitch, getPoses, poseState, savePoses} from "./vista.mjs";
 
 const {ApplicationV2, HandlebarsApplicationMixin} = foundry.applications.api;
@@ -20,6 +21,7 @@ export function openGallery(actor) {
     ui.notifications.warn(_loc("SVPS.Notify.NoPermission", {name: actor.name}));
     return null;
   }
+  countFeature(MODULE_ID, "galleryOpened");
   const existing = foundry.applications.instances.get(PortraitGallery.idFor(actor));
   const app = existing ?? new PortraitGallery({actor});
   app.render({force: true});
@@ -163,6 +165,7 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
       return 0;
     }
     await savePoses(this.actor, existing.concat(added));
+    countFeature(MODULE_ID, "imagesAdded");
     ui.notifications.info(_loc("SVPS.Gallery.Added", {poses: added.length}));
     return added.length;
   }
@@ -199,7 +202,9 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
    */
   static async #onApply(event, target) {
     const id = target.closest("[data-pose-id]")?.dataset.poseId;
-    if ( id ) await applyPose(this.actor, id);
+    if ( !id ) return;
+    countFeature(MODULE_ID, "gallerySwitch");
+    await applyPose(this.actor, id);
   }
 
   /**
@@ -207,6 +212,7 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
    * @this {PortraitGallery}
    */
   static async #onReset() {
+    countFeature(MODULE_ID, "gallerySwitch");
     await applyPose(this.actor, null);
   }
 
@@ -243,6 +249,7 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
       type: "folder",
       current: current?.split("/").slice(0, -1).join("/"),
       callback: async path => {
+        countFeature(MODULE_ID, "folderImport");
         try {
           const files = await browseImages(picker.activeSource, path, picker.source?.bucket);
           if ( !files.length ) {
@@ -267,6 +274,7 @@ export class PortraitGallery extends HandlebarsApplicationMixin(ApplicationV2) {
    */
   static async #onSuggest() {
     if ( !game.user.can("FILES_BROWSE") ) return;
+    countFeature(MODULE_ID, "suggestVariants");
     const {files, failed} = await findAlternates(this.actor, getPoses(this.actor));
     if ( !files.length ) {
       if ( failed.length ) ui.notifications.error(_loc("SVPS.Gallery.FolderFailed", {path: failed.join(", ")}));

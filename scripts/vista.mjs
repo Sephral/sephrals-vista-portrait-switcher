@@ -8,6 +8,7 @@ import {MODULE_ID, makeId, mapLimit, setting} from "./config.mjs";
 import {
   cleanPortrait, cyclePose, findPose, flippedScaleX, normalizePoses, posePortrait, scaledSize, usablePoses
 } from "./poses.mjs";
+import {countFeature} from "./usage.mjs";
 
 /**
  * @typedef PoseTarget
@@ -276,6 +277,7 @@ export async function applyPose(target, ref, {notify=true}={}) {
     }
     await rememberAspect(actor, pose, aspect);
   }
+  countFeature(MODULE_ID, "portraitSwitch");
 
   // Token updates, grouped by scene
   const base = actor.flags?.ember?.portrait ?? {};

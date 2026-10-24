@@ -3,9 +3,10 @@
  * click a portrait.
  */
 
-import {PALETTE_ID, setting} from "./config.mjs";
+import {MODULE_ID, PALETTE_ID, setting} from "./config.mjs";
 import {openGallery} from "./gallery.mjs";
 import {usablePoses} from "./poses.mjs";
+import {countFeature} from "./usage.mjs";
 import {applyPose, canEdit, canSwitch, galleryActor, getPoses, isVistaScene, poseState} from "./vista.mjs";
 
 /**
@@ -95,9 +96,11 @@ async function onPaletteClick(event, hud, token, actor) {
   if ( target.dataset.svps !== "gallery" ) reopenAfterRedraw(hud, token);
   switch ( target.dataset.svps ) {
     case "pose":
+      countFeature(MODULE_ID, "hudSwitch");
       await applyPose(token, target.dataset.poseId);
       break;
     case "reset":
+      countFeature(MODULE_ID, "hudSwitch");
       await applyPose(token, null);
       break;
     case "gallery":
