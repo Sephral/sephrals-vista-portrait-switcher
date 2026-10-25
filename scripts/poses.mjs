@@ -57,7 +57,7 @@ export function withoutQuery(path) {
 /* -------------------------------------------- */
 
 /**
- * The longest common beginning of several names, cut back to the last separator ("mira-vista-").
+ * The longest common beginning of several names, cut back to the last separator ("hero-vista-").
  * @param {string[]} stems
  * @returns {string}
  */
@@ -76,7 +76,7 @@ export function commonPrefix(stems) {
 /* -------------------------------------------- */
 
 /**
- * A readable label from a file name: "mira-vista-look-left" with prefix "mira-vista-" → "Look left".
+ * A readable label from a file name: "hero-vista-look-left" with prefix "hero-vista-" → "Look left".
  * @param {string} stem
  * @param {string} [prefix]
  * @returns {string}

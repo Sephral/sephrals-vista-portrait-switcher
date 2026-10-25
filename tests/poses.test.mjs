@@ -9,13 +9,13 @@ import {
 let counter = 0;
 const makeId = () => `id${++counter}`;
 
-const DIR = "worlds/my-world/assets/actors/mira";
-const MIRA_FILES = [
+const DIR = "worlds/my-world/assets/actors/hero";
+const HERO_FILES = [
   "front", "front-night", "back", "kneeling", "reading", "fighting", "look-left", "look-right"
-].map(name => `${DIR}/mira-vista-${name}.webp`);
+].map(name => `${DIR}/hero-vista-${name}.webp`);
 
 test("fileStem strips folders, query and extension and decodes the name", () => {
-  assert.equal(fileStem("worlds/w/a/mira-vista-front.webp"), "mira-vista-front");
+  assert.equal(fileStem("worlds/w/a/hero-vista-front.webp"), "hero-vista-front");
   assert.equal(fileStem("C:\\images\\Figure%20reading.png?v=3"), "Figure reading");
   assert.equal(fileStem("noext"), "noext");
   assert.equal(fileStem(null), "");
@@ -27,16 +27,16 @@ test("withoutQuery drops the query of a path", () => {
 });
 
 test("commonPrefix cuts back to a separator", () => {
-  assert.equal(commonPrefix(["mira-vista-front", "mira-vista-fighting"]), "mira-vista-");
-  assert.equal(commonPrefix(["mira-vista-look-left", "mira-vista-look-right"]), "mira-vista-look-");
+  assert.equal(commonPrefix(["hero-vista-front", "hero-vista-fighting"]), "hero-vista-");
+  assert.equal(commonPrefix(["hero-vista-look-left", "hero-vista-look-right"]), "hero-vista-look-");
   assert.equal(commonPrefix(["abc", "abd"]), "");
   assert.equal(commonPrefix(["only-one"]), "");
 });
 
 test("labelFromStem builds readable names", () => {
-  assert.equal(labelFromStem("mira-vista-look-left", "mira-vista-"), "Look left");
+  assert.equal(labelFromStem("hero-vista-look-left", "hero-vista-"), "Look left");
   assert.equal(labelFromStem("with_pebble"), "With pebble");
-  assert.equal(labelFromStem("mira-vista-", "mira-vista-"), "Mira-vista-");
+  assert.equal(labelFromStem("hero-vista-", "hero-vista-"), "Hero-vista-");
 });
 
 test("normalizePoses fills defaults, drops empty entries and repairs ids", () => {
@@ -89,7 +89,7 @@ test("cyclePose wraps around and starts at the ends", () => {
 });
 
 test("posesFromFiles makes one portrait per image and names it after the file", () => {
-  const added = posesFromFiles(MIRA_FILES, {makeId, preferred: `${DIR}/mira-vista-front.webp`});
+  const added = posesFromFiles(HERO_FILES, {makeId, preferred: `${DIR}/hero-vista-front.webp`});
   assert.equal(added.length, 8, "every image becomes a portrait, also variants such as \"front-night\"");
   assert.equal(added[0].label, "Front", "the actor image comes first");
   assert.deepEqual(added.slice(1).map(p => p.label),
@@ -98,17 +98,17 @@ test("posesFromFiles makes one portrait per image and names it after the file", 
 });
 
 test("posesFromFiles skips images already in the gallery and learns the prefix from them", () => {
-  const existing = normalizePoses([{id: "front", label: "Front", src: `${DIR}/mira-vista-front.webp`}], makeId);
-  const added = posesFromFiles([`${DIR}/mira-vista-front.webp`, `${DIR}/mira-vista-fighting.webp`], {existing, makeId});
+  const existing = normalizePoses([{id: "front", label: "Front", src: `${DIR}/hero-vista-front.webp`}], makeId);
+  const added = posesFromFiles([`${DIR}/hero-vista-front.webp`, `${DIR}/hero-vista-fighting.webp`], {existing, makeId});
   assert.equal(added.length, 1);
   assert.equal(added[0].label, "Fighting");
 });
 
 test("posesFromFiles ignores the cache-busting query of the actor image", () => {
-  const added = posesFromFiles(MIRA_FILES, {makeId, preferred: `${DIR}/mira-vista-front.webp?1791653960670`});
+  const added = posesFromFiles(HERO_FILES, {makeId, preferred: `${DIR}/hero-vista-front.webp?1791653960670`});
   assert.equal(added[0].label, "Front");
-  const existing = normalizePoses([{id: "f", src: `${DIR}/mira-vista-fighting.webp?123`}], makeId);
-  assert.equal(posesFromFiles([`${DIR}/mira-vista-fighting.webp`], {existing, makeId}).length, 0);
+  const existing = normalizePoses([{id: "f", src: `${DIR}/hero-vista-fighting.webp?123`}], makeId);
+  assert.equal(posesFromFiles([`${DIR}/hero-vista-fighting.webp`], {existing, makeId}).length, 0);
 });
 
 test("posesFromFiles keeps a single file's full name", () => {
