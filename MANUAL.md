@@ -37,6 +37,19 @@ All options are in *Game Settings → Configure Settings → Sephral’s Vista P
 | Button in the token HUD | The mask button with the palette (for you) |
 | Self test | Checks the connection to Ember's Vistas and every image of every gallery (GM) |
 
+## Usage statistics
+
+The module can take part in a small usage report shared by all of Sephral’s modules. Nothing is counted or sent until the GM agrees: shortly after the world starts, the active GM is asked, and the question comes back at every start until there is an answer. The answer counts for all of Sephral’s modules in the world. *Share usage statistics* in the module settings turns the report on or off at any time, and *Manage statistics* below it shows what the report contains right now.
+
+With the GM’s consent only the active GM’s browser counts, and it sends at most one report a day. The question lists everything the report contains, from the Foundry version to a random world ID. For the Portrait Switcher it holds:
+
+* on how many of the last 30 days the module was used
+* how often portraits are switched in a Vista, from the token HUD or in the gallery, the gallery is opened, images are added or imported from a folder and variants are suggested
+* the settings *Players switch portraits*, *A switch changes* and *Transition* (only the chosen option)
+* where errors occur in the module code: file, line and error type, never the error message
+
+No names, chat messages, notes, dice results or other content of the world are sent.
+
 ## Self test
 
 After an update of Ember or Foundry the GM gets a short notice. The self test in the settings checks that Ember's Vistas can still be found, loads every image of every gallery and posts the result as a chat message only the GM sees, with the images that cannot be loaded.
