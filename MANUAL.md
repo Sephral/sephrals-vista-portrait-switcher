@@ -41,7 +41,7 @@ All options are in *Game Settings → Configure Settings → Sephral’s Vista P
 
 The module can take part in a small usage report shared by all of Sephral’s modules. Nothing is counted or sent until the GM agrees: shortly after the world starts, the active GM is asked, and the question comes back at every start until there is an answer. The answer counts for all of Sephral’s modules in the world. *Share usage statistics* in the module settings turns the report on or off at any time, and *Manage statistics* below it shows what the report contains right now.
 
-With the GM’s consent only the active GM’s browser counts, and it sends at most one report a day. The question lists everything the report contains, from the Foundry version to a random world ID. For the Portrait Switcher it holds:
+With the GM’s consent only the active GM’s browser counts, and it sends at most one report a day. The counts are kept in a hidden world setting, so all browsers and computers of the GM count together, and turning the statistics off deletes them. A copy of a world gets its own world ID. The question lists everything the report contains, from the Foundry version to a random world ID. For the Portrait Switcher it holds:
 
 * on how many of the last 30 days the module was used
 * how often portraits are switched in a Vista, from the token HUD or in the gallery, the gallery is opened, images are added or imported from a folder and variants are suggested
