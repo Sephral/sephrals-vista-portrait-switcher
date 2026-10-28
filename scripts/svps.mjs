@@ -1,5 +1,7 @@
 import {MODULE_ID} from "./config.mjs";
 import {addContextOptions, addHeaderControl} from "./controls.mjs";
+import {registerDebug} from "./debug.mjs";
+import {saveDebugFile} from "./debug-file.mjs";
 import {PortraitGallery, openGallery, refreshGalleries} from "./gallery.mjs";
 import {onRenderTokenHUD} from "./hud.mjs";
 import {applyModuleLanguage} from "./language.mjs";
@@ -12,6 +14,7 @@ import {
 
 Hooks.once("init", () => {
   registerSettings();
+  registerDebug();
   registerUsage(MODULE_ID, {
     features: ["portraitSwitch", "hudSwitch", "gallerySwitch", "galleryOpened", "imagesAdded", "folderImport",
       "suggestVariants"],
@@ -49,6 +52,8 @@ Hooks.once("init", () => {
     openSettings,
     /** Check the Ember integration and every gallery image (GM). */
     runSelfTest,
+    /** Save the debug file of Sephral's modules (GM): about one chat message, or without an id the latest picture. */
+    saveDebugFile: messageId => saveDebugFile(messageId ?? null, {moduleId: MODULE_ID}),
     PortraitGallery
   };
 });

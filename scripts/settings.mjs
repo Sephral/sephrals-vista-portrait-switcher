@@ -5,6 +5,7 @@
  */
 
 import {MODULE_ID, TRANSITIONS} from "./config.mjs";
+import {registerDebugMenu} from "./debug-file.mjs";
 import {refreshGalleries} from "./gallery.mjs";
 import {refreshTokenHUD} from "./hud.mjs";
 import {FOLLOW_FOUNDRY, applyModuleLanguage} from "./language.mjs";
@@ -80,7 +81,7 @@ class VistaSelfTestMenu extends foundry.applications.api.ApplicationV2 {
 /* -------------------------------------------- */
 
 /**
- * Register all settings of the module and the self-test menu button.
+ * Register all settings of the module and the menu buttons for the self-test and the debug file.
  */
 export function registerSettings() {
   for ( const group of SETTINGS ) {
@@ -109,6 +110,9 @@ export function registerSettings() {
     type: VistaSelfTestMenu,
     restricted: true
   });
+
+  // The button saves the debug file of Sephral's modules instead of opening a window
+  registerDebugMenu(MODULE_ID, {name: "SVPS.DEBUG.Title", label: "SVPS.DEBUG.Save", hint: "SVPS.DEBUG.Hint"});
 }
 
 /* -------------------------------------------- */

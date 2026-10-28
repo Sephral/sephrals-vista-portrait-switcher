@@ -36,6 +36,7 @@ All options are in *Game Settings → Configure Settings → Sephral’s Vista P
 | Transition duration (ms) | Duration of the transition (GM) |
 | Button in the token HUD | The mask button with the palette (for you) |
 | Self test | Checks the connection to Ember's Vistas and every image of every gallery (GM) |
+| Debug file | Saves a file for bug reports, see [Debug file](#debug-file) (GM) |
 
 ## Usage statistics
 
@@ -54,6 +55,12 @@ No names, chat messages, notes, dice results or other content of the world are s
 
 After an update of Ember or Foundry the GM gets a short notice. The self test in the settings checks that Ember's Vistas can still be found, loads every image of every gallery and posts the result as a chat message only the GM sees, with the images that cannot be loaded.
 
+## Debug file
+
+For bug reports, the GM saves one file about all of Sephral’s modules in this world: `Save debug file` in the module settings, or `Save Debug File (Sephral’s Modules)` in the context menu of a chat message. It holds the versions of Foundry, the system and the active modules, the settings of the modules and what they recorded, for the Vista Portrait Switcher the verified and installed versions, how many characters have a gallery with how many portraits and which scenes are Vistas. Macros call `game.modules.get("sephrals-vista-portrait-switcher").api.saveDebugFile()`.
+
+The file contains chat text and whispers. Check it before you share it.
+
 ## API
 
 `game.modules.get("sephrals-vista-portrait-switcher").api` offers:
@@ -71,6 +78,7 @@ After an update of Ember or Foundry the GM gets a short notice. The self test in
 | `isVistaScene(scene)` | Whether a scene is an Ember Vista |
 | `openSettings()` | Opens the settings of the module |
 | `runSelfTest()` | Runs the self test (GM) |
+| `saveDebugFile()` | Saves the debug file of Sephral’s modules (GM) |
 
 ## Limits
 

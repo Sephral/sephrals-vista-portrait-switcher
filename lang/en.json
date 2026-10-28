@@ -134,6 +134,13 @@
       "waves": "Waves",
       "wind": "Wind",
       "whiteNoise": "White noise"
+    },
+    "DEBUG": {
+      "Title": "Debug file",
+      "Save": "Save debug file",
+      "Hint": "Saves one file for bug reports about all of Sephral’s modules in this world: versions, settings and what the modules recorded, such as the latest chat messages they read. It contains chat text and whispers, check it before you share it.",
+      "Entry": "Save Debug File (Sephral’s Modules)",
+      "Saved": "Debug file {file} saved. It contains chat text and whispers, check it before you share it."
     }
   }
 }
