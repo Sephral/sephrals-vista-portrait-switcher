@@ -1,7 +1,8 @@
-import {MODULE_ID} from "./config.mjs";
+import {MODULE_ID, TESTED_VERSIONS} from "./config.mjs";
 import {addContextOptions, addHeaderControl} from "./controls.mjs";
 import {registerDebug} from "./debug.mjs";
 import {saveDebugFile} from "./debug-file.mjs";
+import {registerHubModule} from "./hub.mjs";
 import {PortraitGallery, openGallery, refreshGalleries} from "./gallery.mjs";
 import {onRenderTokenHUD} from "./hud.mjs";
 import {applyModuleLanguage} from "./language.mjs";
@@ -13,6 +14,7 @@ import {
 } from "./vista.mjs";
 
 Hooks.once("init", () => {
+  registerHubModule({moduleId: MODULE_ID, tested: TESTED_VERSIONS});
   registerSettings();
   registerDebug();
   registerUsage(MODULE_ID, {
