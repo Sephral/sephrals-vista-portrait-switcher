@@ -19,7 +19,7 @@ export const TRANSITIONS = ["fade", "dots", "crosshatch", "glitch", "hole", "hol
   "waterDrop", "waves", "wind", "whiteNoise"];
 
 /** The versions of Ember and Foundry the module was verified against (see the self-test). */
-export const TESTED_VERSIONS = {ember: "0.6.3", core: "14.369"};
+export const TESTED_VERSIONS = {ember: "0.6.3", core: "14.370"};
 
 /**
  * Read a setting of this module.
