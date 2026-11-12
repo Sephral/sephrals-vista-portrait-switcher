@@ -47,7 +47,7 @@ With the GM’s consent only the active GM’s browser counts, and it sends at m
 * on how many of the last 30 days the module was used
 * how often portraits are switched in a Vista, from the token HUD or in the gallery, the gallery is opened, images are added or imported from a folder and variants are suggested
 * the settings *Players switch portraits*, *A switch changes* and *Transition* (only the chosen option)
-* where errors occur in the module code: file, line and error type, never the error message
+* where errors occur in the module code: file, line, error type and whether the error arose in the module itself, in Foundry, in the game system or in another module, never the error message or the name of another module
 
 No names, chat messages, notes, dice results or other content of the world are sent.
 
